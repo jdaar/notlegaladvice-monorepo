@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "notlegaladvice",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

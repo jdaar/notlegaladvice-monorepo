@@ -2,9 +2,13 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    "target": "ES2021",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "tsBuildInfoFile": "dist/tsconfig.lib.tsbuildinfo",
     "emitDeclarationOnly": false,
     "forceConsistentCasingInFileNames": true,
+    "declaration": true,
     "types": ["node"]
   },
   "include": ["src/**/*.ts"],
