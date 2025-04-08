@@ -15,6 +15,9 @@
     "noUnusedLocals": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2022"
+    "target": "es2022",
+    "paths": {
+      "@notlegaladvice/domain": ["packages/domain/src/index.ts"]
+    }
   }
 }

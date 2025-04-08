@@ -2,12 +2,18 @@
   "extends": "./tsconfig.base.json",
   "compileOnSave": false,
   "files": [],
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "target": "ESNext"
+  },
   "references": [
     {
-      "path": "./apps/notlegaladvice-e2e"
+      "path": "./apps/server"
     },
     {
-      "path": "./apps/notlegaladvice"
+      "path": "./packages/domain"
     }
   ]
 }

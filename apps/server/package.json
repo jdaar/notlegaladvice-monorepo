@@ -1,9 +1,8 @@
 {
-  "name": "@notlegaladvice/notlegaladvice",
+  "name": "@notlegaladvice/server",
   "version": "0.0.1",
   "private": true,
   "nx": {
-    "name": "notlegaladvice",
     "targets": {
       "build": {
         "executor": "@nx/esbuild:esbuild",
@@ -13,15 +12,15 @@
         "defaultConfiguration": "production",
         "options": {
           "platform": "node",
-          "outputPath": "apps/notlegaladvice/dist",
+          "outputPath": "apps/server/dist",
           "format": [
             "cjs"
           ],
           "bundle": false,
-          "main": "apps/notlegaladvice/src/main.ts",
-          "tsConfig": "apps/notlegaladvice/tsconfig.app.json",
+          "main": "apps/server/src/main.ts",
+          "tsConfig": "apps/server/tsconfig.app.json",
           "assets": [
-            "apps/notlegaladvice/src/assets"
+            "apps/server/src/assets"
           ],
           "esbuildOptions": {
             "sourcemap": true,
@@ -33,7 +32,6 @@
         "configurations": {
           "development": {},
           "production": {
-            "generateLockfile": true,
             "esbuildOptions": {
               "sourcemap": false,
               "outExtension": {
@@ -50,15 +48,15 @@
           "build"
         ],
         "options": {
-          "buildTarget": "notlegaladvice:build",
+          "buildTarget": "@notlegaladvice/server:build",
           "runBuildTargetDependencies": false
         },
         "configurations": {
           "development": {
-            "buildTarget": "notlegaladvice:build:development"
+            "buildTarget": "@notlegaladvice/server:build:development"
           },
           "production": {
-            "buildTarget": "notlegaladvice:build:production"
+            "buildTarget": "@notlegaladvice/server:build:production"
           }
         }
       },
@@ -66,12 +64,6 @@
         "options": {
           "passWithNoTests": true
         }
-      },
-      "docker-build": {
-        "dependsOn": [
-          "build"
-        ],
-        "command": "docker build -f apps/notlegaladvice/Dockerfile . -t notlegaladvice"
       }
     }
   }
