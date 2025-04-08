@@ -20,6 +20,15 @@
   ],
   "references": [
     {
+      "path": "../../packages/file-repository/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/database/tsconfig.lib.json"
+    },
+    {
+      "path": "../../packages/llm-integration/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/domain"
     }
   ]
