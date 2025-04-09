@@ -1,1 +1,2 @@
-export * from './lib/domain.js';
+export * from './lib/interfaces.js';
+export * from './lib/entities.js';

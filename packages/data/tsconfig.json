@@ -2,12 +2,6 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/lib/*"]
-    }
-  },
   "references": [
     {
       "path": "./tsconfig.lib.json"

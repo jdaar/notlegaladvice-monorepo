@@ -1,0 +1,23 @@
+meta {
+  name: obtain legal advice
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{host}}/api/v1/legal-advice
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "files": {
+      "doc1": {
+        "extractedText": "prueba",
+        "reflection": "i think that..."
+      }
+    },
+    "context": "prueba"
+  }
+}

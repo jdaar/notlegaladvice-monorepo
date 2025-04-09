@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: notlegaladvice-server-service
+  labels:
+    app: notlegaladvice-server
+    component: application
+spec:
+  selector:
+    app: notlegaladvice-server
+  type: ClusterIP
+  ports:
+    - name: api
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

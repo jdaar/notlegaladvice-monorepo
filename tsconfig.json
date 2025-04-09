@@ -23,6 +23,18 @@
     },
     {
       "path": "./packages/database"
+    },
+    {
+      "path": "./packages/data"
+    },
+    {
+      "path": "./packages/streaming"
+    },
+    {
+      "path": "./packages/application"
+    },
+    {
+      "path": "./packages/usecase"
     }
   ]
 }

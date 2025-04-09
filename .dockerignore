@@ -1,0 +1,33 @@
+# .dockerignore
+
+# Git repository files
+.git
+.gitignore
+
+# Node.js dependencies (these will be installed INSIDE the container)
+node_modules
+
+# Nx cache and local build outputs
+dist
+tmp
+.nx/cache
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor configuration
+.vscode
+.idea
+
+# Log files
+*.log
+
+# Environment files (if not needed in build context)
+.env
+.env.*
+!/.env.example # Example: keep example env files if needed
+
+# Files related to the Dockerfile location itself, if they shouldn't be copied
+# (usually not necessary unless you have other scripts in deployment/)
+# deployment/

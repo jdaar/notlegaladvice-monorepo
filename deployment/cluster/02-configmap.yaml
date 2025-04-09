@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: server-config
+data:
+  GOOGLE_AI_MODEL: "gemini-1.5-flash-latest"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://jaeger-collector-service:4317"
+  OTEL_SERVICE_NAME: "notlegaladvice"

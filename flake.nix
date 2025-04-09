@@ -51,10 +51,10 @@
               echo "Root dependencies appear up to date. Skipping 'npm install'."
             fi
 
-            echo "Running 'npx nx serve server'..."
+            echo "Running 'npx nx run @notlegaladvice/server:serve:development'..."
             # Use exec to replace the script process, pass arguments
             # Ensure npx is found via the PATH set by the wrapper
-            exec npx nx start server "$@"
+            exec npx nx run @notlegaladvice/server:serve:development "$@"
           '';
 
           # 2. The wrapper script used by `nix run`
@@ -77,6 +77,7 @@
             buildInputs = [
               pkgs.nodejs_20
               pkgs.corepack_20
+              pkgs.docker_28
               pkgs.bash
               # Add a symlink or simple script named 'start-server' in the shell
               # that points to the implementation script.

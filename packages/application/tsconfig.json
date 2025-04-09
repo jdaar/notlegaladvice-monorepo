@@ -2,13 +2,16 @@
   "extends": "../../tsconfig.base.json",
   "files": [],
   "include": [],
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/lib/*"]
-    }
-  },
   "references": [
+    {
+      "path": "../llm-integration"
+    },
+    {
+      "path": "../usecase"
+    },
+    {
+      "path": "../domain"
+    },
     {
       "path": "./tsconfig.lib.json"
     },

@@ -10,16 +10,16 @@
   },
   "references": [
     {
-      "path": "../../packages/file-repository"
+      "path": "../../packages/usecase"
     },
     {
-      "path": "../../packages/database"
+      "path": "../../packages/application"
     },
     {
-      "path": "../../packages/llm-integration"
+      "path": "../../packages/streaming"
     },
     {
-      "path": "../../packages/domain"
+      "path": "../../packages/data"
     },
     {
       "path": "./tsconfig.app.json"
