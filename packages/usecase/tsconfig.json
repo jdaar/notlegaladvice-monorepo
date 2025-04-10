@@ -4,18 +4,6 @@
   "include": [],
   "references": [
     {
-      "path": "../data"
-    },
-    {
-      "path": "../llm-integration"
-    },
-    {
-      "path": "../streaming"
-    },
-    {
-      "path": "../domain"
-    },
-    {
       "path": "./tsconfig.lib.json"
     },
     {

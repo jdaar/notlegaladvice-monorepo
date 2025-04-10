@@ -6,9 +6,13 @@ export namespace Errors {
 		UnableToInvokeTemplate = "UNABLE_TO_INVOKE_TEMPLATE",
 		UnableToCreateSink = "UNABLE_TO_CREATE_SINK",
 		UnableToCreateStream = "UNABLE_TO_CREATE_STREAM",
+		UnableToParseFile = "UNABLE_TO_PARSE_FILE",
 		Unidentified = "UNIDENTIFIED"
 	}
 
+	export class UnableToParseFile extends Data.TaggedError(Code.UnableToParseFile)<{
+		cause: Error
+	}>{}
 	export class UnableToInvokeTemplate extends Data.TaggedError(Code.UnableToInvokeTemplate)<{
 		cause: Error
 	}>{}

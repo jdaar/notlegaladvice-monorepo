@@ -1,8 +1,7 @@
 import { Effect, Ref, Option, Schema, JSONSchema } from "effect";
 import { WebSocket } from "@fastify/websocket";
 import { ErrorResponse, SuccessResponse } from "@notlegaladvice/data";
-import { FastifyInstance } from "fastify";
-import { IncomingHttpHeaders } from "http";
+import { FastifyInstance, FastifyRequest } from "fastify";
 import { Streaming } from "@notlegaladvice/streaming";
 import { AIMessageChunk } from "@langchain/core/messages";
 import { Errors } from "@notlegaladvice/data";
@@ -24,26 +23,79 @@ export namespace Controllers {
 	] as const
 	export type ProtocolVerb = typeof PROTOCOL_VERB[number];
 
+  type HttpPayload = FastifyRequest & { isWebSocket: false }
+  type WebSocketPayload = {
+    body: unknown
+    messageQuantity: number
+    isWebSocket: true
+  }
+	export type Payload = HttpPayload | WebSocketPayload
+
+  type BoundSchemaHttpHandler<
+		S1 extends Schema.Schema<any, any, any>,
+		S2 extends Schema.Schema<any, any, any>
+  > = {
+		type: Protocol,
+		function: (payload: HttpPayload, sinkCallback: Option.Option<Streaming.SinkCallback>) => Effect.Effect<S2['Type'], Error, Contexts.ApplicationContext>,
+		schema: {
+			request: S1
+			response: S2
+		}
+    usesSchema: true,
+    isWebSocket: false
+	}
+
+  type UnboundSchemaHttpHandler<
+		S2 extends Schema.Schema<any, any, any>
+  > = {
+		type: Protocol,
+		function: (payload: HttpPayload, sinkCallback: Option.Option<Streaming.SinkCallback>) => Effect.Effect<S2['Type'], Error, Contexts.ApplicationContext>,
+		schema: {
+			request: unknown
+			response: S2
+		}
+    usesSchema: false,
+    isWebSocket: false
+	}
+
+  type BoundSchemaWebSocketHandler<
+		S1 extends Schema.Schema<any, any, any>,
+		S2 extends Schema.Schema<any, any, any>
+  > = {
+		type: Protocol,
+		function: (payload: WebSocketPayload, sinkCallback: Option.Option<Streaming.SinkCallback>) => Effect.Effect<S2['Type'], Error, Contexts.ApplicationContext>,
+		schema: {
+			request: S1
+			response: S2
+		}
+    usesSchema: false,
+    isWebSocket: true
+	}
+
+  type UnboundSchemaWebSocketHandler<
+		S2 extends Schema.Schema<any, any, any>
+  > = {
+		type: Protocol,
+		function: (payload: WebSocketPayload, sinkCallback: Option.Option<Streaming.SinkCallback>) => Effect.Effect<S2['Type'], Error, Contexts.ApplicationContext>,
+		schema: {
+			request: unknown
+			response: S2
+		}
+    usesSchema: false,
+    isWebSocket: true
+	}
+
 	export type Handler<
 		S1 extends Schema.Schema<any, any, any>,
 		S2 extends Schema.Schema<any, any, any>
-	> = {
-		type: Protocol,
-		function: (payload: Payload<S1['Type']>, sinkCallback: Option.Option<Streaming.SinkCallback>) => Effect.Effect<S2['Type'], Error, Contexts.ApplicationContext>,
-		schema: {
-			request?: S1
-			response?: S2
-		}
-	}
+	> = BoundSchemaHttpHandler<S1, S2> |
+    UnboundSchemaHttpHandler<S2> |
+    BoundSchemaWebSocketHandler<S1, S2> |
+    UnboundSchemaWebSocketHandler<S2>
+
 	type AnyHandler = Handler<any, any>
 	type HandlerPool = {
 		[verb in ProtocolVerb]?: AnyHandler
-	}
-
-	export type Payload<T> = {
-		body: T,
-		headers?: IncomingHttpHeaders,
-		messageQuantity?: number
 	}
 
 	export abstract class Controller {
@@ -110,22 +162,24 @@ export namespace Controllers {
 			requestJsonSchemaId: string,
 			responseJsonSchemaId: string,
 		) {
-			if (!Objects.isNull(Objects.requireNonNull(this.handlers[verb]).schema.request)) {
-				server.addSchema(
-					this.convertSchemaToJsonSchema(
-						this.handlers[verb]!.schema.request!,
-						requestJsonSchemaId
-					)
-				);
-			}
-			if (!Objects.isNull(Objects.requireNonNull(this.handlers[verb]).schema.response)) {
-				server.addSchema(
-					this.convertSchemaToJsonSchema(
-						this.handlers[verb]!.schema.response!,
-						responseJsonSchemaId
-					)
-				);
-			}
+      if (this.handlers[verb]?.usesSchema) {
+        if (!Objects.isNull(Objects.requireNonNull(this.handlers[verb]).schema.request)) {
+          server.addSchema(
+            this.convertSchemaToJsonSchema(
+              this.handlers[verb]!.schema.request!,
+              requestJsonSchemaId
+            )
+          );
+        }
+        if (!Objects.isNull(Objects.requireNonNull(this.handlers[verb]).schema.response)) {
+          server.addSchema(
+            this.convertSchemaToJsonSchema(
+              this.handlers[verb]!.schema.response!,
+              responseJsonSchemaId
+            )
+          );
+        }
+      }
 		}
 
 		private subscribeHTTPHandler(
@@ -144,27 +198,29 @@ export namespace Controllers {
 				url: this.url,
 				method: verb,
 				handler: async (request) => {
-					return await execute(Objects.requireNonNull(this.handlers[verb]).function(
-						request,
-						Option.none()
-					)
-						.pipe(
-							Effect.tap((result) => Effect.log(result)),
-							Effect.withSpan(`${this.name}.${this.protocol}`, {
-								attributes: {
-									[`${this.protocol}.body`]: request.body,
-									[`${this.protocol}.method`]: verb,
-									[`${this.protocol}.target`]: this.url,
-								},
-							})
-						)
+					return await execute(
+            !Objects.requireNonNull(this.handlers[verb]).isWebSocket && this.handlers[verb]?.usesSchema ?
+              this.handlers[verb]!.function(
+              { ...request, isWebSocket: false },
+              Option.none()
+            )
+              .pipe(
+                Effect.tap((result) => Effect.log(result)),
+                Effect.withSpan(`${this.name}.${this.protocol}`, {
+                  attributes: {
+                    [`${this.protocol}.body`]: request.body,
+                    [`${this.protocol}.method`]: verb,
+                    [`${this.protocol}.target`]: this.url,
+                  },
+                })
+						) : Effect.sync(() => {})
 					);
 				},
-				schema: {
+				schema: this.handlers[verb]?.usesSchema ? {
 					body: {
 						$ref: requestJsonSchemaId
 					}
-				}
+				} : undefined
 			});
 		}
 
@@ -196,10 +252,13 @@ export namespace Controllers {
 				Ref.get(messageQuantity)
 					.pipe(
 						Effect.flatMap(quantity =>
-							Objects.requireNonNull(this.handlers["MESSAGE"]).function(
+							Objects.requireNonNull(this.handlers["MESSAGE"]).isWebSocket && !this.handlers["MESSAGE"]!.usesSchema ?
+                // TODO: fix typing
+              (this.handlers["MESSAGE"] as UnboundSchemaWebSocketHandler<any>)!.function(
 								{
 									body: message,
-									messageQuantity: quantity
+									messageQuantity: quantity,
+                  isWebSocket: true,
 								},
 								Option.some(sinkCallback)
 							)
@@ -223,7 +282,7 @@ export namespace Controllers {
 											[`${this.protocol}.target`]: this.url,
 										},
 									})
-								)
+								) : Effect.sync(() => {})
 						)
 					)
 			);

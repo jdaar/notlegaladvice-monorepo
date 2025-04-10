@@ -6,7 +6,7 @@ meta {
 
 post {
   url: {{host}}/api/v1/legal-advice
-  body: json
+  body: multipartForm
   auth: inherit
 }
 
@@ -20,4 +20,12 @@ body:json {
     },
     "context": "prueba"
   }
+}
+
+body:multipart-form {
+  file: @file(C:\Users\root\Downloads\Condiciones-de-Uso_-RappiPay_120822_-current-1.pdf)
+}
+
+body:file {
+  file: @file()
 }

@@ -7,33 +7,35 @@ import { Errors } from "@notlegaladvice/data";
 export class ExtractLegalAdviceUseCase extends Context.Tag("ExtractLegalAdviceUseCase")<
   ExtractLegalAdviceUseCase,
 	(
-		files: Array<{
-			content: string,
-			reflection: string
-		}>,
-		context: string
+    userRequest: string,
+    file: {
+      fileMimeType: string,
+      fileBase64: string
+    }
 	) => Effect.Effect<
 		DomainEntities.LegalAdvice,
 		Errors.UnableToInvokeTemplate |
 		Errors.UnableToConsumeStream |
 		Errors.UnableToCreateStream |
+		Errors.UnableToParseFile |
 		Errors.UnableToCreateSink,
 		Services.TypistAgentInstance
 	>
 >() {}
 
 function extractLegalAdvice(
-	_: Array<{
-		content: string,
-		reflection: string
-	}>,
-	context: string
+  userRequest: string,
+  file: {
+    fileMimeType: string,
+    fileBase64: string
+  }
 ) {
 	return Effect.gen(function* () {
 		const prompt = yield* Effect.tryPromise({
-			try: async () => await Prompts.Templates.applyCBAStandardFormat.invoke({
-				advice: context
-			}),
+			try: async () => await Prompts.Templates.extractLegalAdvice.invoke({
+        userRequest,
+        ...file
+      }),
 			catch: (error) => new Errors.UnableToInvokeTemplate({
 				cause: error as Error
 			})
@@ -73,9 +75,13 @@ function extractLegalAdvice(
 				Effect.catchAll(error => Effect.fail(new Errors.UnableToConsumeStream({cause: error as Error})))
 			);
 
-		return {
-			regulatedByLaw: result.content
-		} as DomainEntities.LegalAdvice
+    if (result.tool_calls === null || result.tool_calls === undefined || result.tool_calls.length === 0)
+      return yield* Effect.fail(new Errors.UnableToParseFile({cause: new Error('no tool call retrieved from llm')}))
+
+    if (result.tool_calls[0].name !== 'create_cba_platform_response_format')
+      yield* Effect.fail(new Errors.UnableToParseFile({cause: new Error('tool call does not match format')}))
+
+    return result.tool_calls![0].args as DomainEntities.LegalAdvice
 	})
 }
 

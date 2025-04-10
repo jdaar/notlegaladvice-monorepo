@@ -1,43 +1,39 @@
 import { Effect } from "effect";
-import { Controllers } from "../common/controller.js";
-import { SuccessResponse } from "@notlegaladvice/data";
-import { Schemas } from "@notlegaladvice/data";
-import { ExtractLegalAdviceUseCase } from "@notlegaladvice/usecase";
-import { FastifyInstance } from "fastify";
+import { ErrorResponse, Errors, SuccessResponse } from "@notlegaladvice/data";
+import { FastifyInstance, FastifyRequest } from "fastify";
+import { createUnboundSchemaHttpHandlerSuscriptor } from "../common/handler.js";
+import { Objects } from "@notlegaladvice/application";
+import { ExtractLegalAdviceUseCase } from "@notlegaladvice/usecase"
 
-class LegalResponsabilitiesController extends Controllers.Controller {
-	constructor() {
-		super(
-			"HTTP",
-			{
-				"POST": {
-					type: "HTTP",
-					function: ((payload, _) => {
-						return Effect.gen(function* () {
-							const useCase = yield* ExtractLegalAdviceUseCase;
-							const result = yield* useCase([], payload.body.context);
-							return SuccessResponse({
-								advice: result
-							})
-						});
-					}),
-					schema: {
-						request: Schemas.ControllerPayload.extractLegalAdvice.request,
-						response: Schemas.ControllerPayload.extractLegalAdvice.response
-					}
-				} satisfies Controllers.Handler<
-					typeof Schemas.ControllerPayload.extractLegalAdvice.request,
-					typeof Schemas.ControllerPayload.extractLegalAdvice.response
-				>
-			},
-			"extract_legal_advice",
-			"/api/v1/legal-advice"
-		)
-	}
-}
+const suscriptor = createUnboundSchemaHttpHandlerSuscriptor(
+  (request: FastifyRequest<{ Body: {
+    request: string,
+    file: string
+  }}>) => Effect.gen(function* () {
+    const extractLegalAdviceUseCase = yield* ExtractLegalAdviceUseCase;
+    const file = request.body.file
+    if (Objects.isNull(file))
+      return ErrorResponse("a file is required", Errors.Code.Unidentified);
 
-const controllerInstance = new LegalResponsabilitiesController();
+    const userRequest = request.body.request
+
+    const fileInput = {
+      fileMimeType: "application/pdf",
+      fileBase64: file,
+    }
+
+    yield* Effect.log(file);
+    const result = yield* extractLegalAdviceUseCase(userRequest, fileInput);
+
+    return SuccessResponse(result)
+  }),
+  {
+    method: 'POST',
+    url: '/api/v1/legal-advice',
+    name: 'extract_legal_advice',
+  }
+)
 
 export default async function (fastify: FastifyInstance) {
-  controllerInstance.subscribe(fastify);
+  suscriptor(fastify)
 }

@@ -5,7 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, nixpkgs, ... }@attrs:
+  outputs = { nixpkgs, ... }:
     let
       systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
@@ -14,9 +14,6 @@
       perSystem = system:
         let
           pkgs = import nixpkgs { inherit system; };
-
-          # 1. The core logic script (install deps, run nx)
-          #    This script EXPECTS node/npm/npx to be in the PATH when it runs.
           startLogicScriptDrv = pkgs.writeShellScriptBin "start-server-impl" ''
             #!/usr/bin/env bash
             set -e # Exit immediately if a command exits with a non-zero status.
@@ -54,11 +51,15 @@
             echo "Running 'npx nx run @notlegaladvice/server:serve:development'..."
             # Use exec to replace the script process, pass arguments
             # Ensure npx is found via the PATH set by the wrapper
+
+            export GOOGLE_AI_MODEL=gemini-2.0-flash
+            export OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger-collector-service:4317
+            export OTEL_SERVICE_NAME=notlegaladvice
+            export GOOGLE_API_KEY=AIzaSyBOpZAMMJz2Amo2vGguySqnwv9uBLwKiOY
+
             exec npx nx run @notlegaladvice/server:serve:development "$@"
           '';
 
-          # 2. The wrapper script used by `nix run`
-          #    This script sets up the PATH and then calls the logic script.
           appRunnerScriptDrv = pkgs.writeShellScriptBin "run-server-app" ''
             #!${pkgs.bash}/bin/bash
             set -e
@@ -70,17 +71,12 @@
 
         in
         {
-          # Define the devShell
-          # It needs nodejs AND the *logic* script (start-server-impl) available directly
-          # We rename the user-facing command in the shell for consistency.
           devShell = pkgs.mkShell {
             buildInputs = [
               pkgs.nodejs_20
               pkgs.corepack_20
               pkgs.docker_28
               pkgs.bash
-              # Add a symlink or simple script named 'start-server' in the shell
-              # that points to the implementation script.
               (pkgs.writeShellScriptBin "start-server" ''
                 #!${pkgs.bash}/bin/bash
                 exec "${startLogicScriptDrv}/bin/start-server-impl" "$@"

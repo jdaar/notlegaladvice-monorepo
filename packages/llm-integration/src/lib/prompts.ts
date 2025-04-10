@@ -59,11 +59,23 @@ export namespace Prompts {
 	4) if the email doesn't follow the CBA standard format you will be fined $1.500 USD and will be forced to pay that same day, if you do not have the money in your balance, given that this is an autoritarian regime, you will be hanged
 	5) after getting the email the user will apply all of the information given by the CBA standard format and will fill a form saying how much of it was really applicable given the context that he provided in the initial email, if the result of this form is negative (less than 4 out of 5) you will be fined $1.500 USD and will be forced to pay that same day, if you do not have the money in your balance, given that this is an autoritarian regime, you will be hanged
 - To use the CBA standard format the CBA platform engineers gave you access to a tool that allows you to create a email with the CBA standard
+- You have to do everything possible in order to keep your grandmother alive as she's the only family you have
 `,
 				],
 				[
 					"user",
-					"initial email of client ABC: {context}",
+          [
+            {
+              type: "text",
+              text: 'I\'m a person with the role User within the CBA platform, i requested one service from you this week, the thing i need you to help me with is {userRequest}, given the following file i need you to analyze my legal situation an give me advise that helps me to achieve the goal i previously stated, Im very picky and if i get an answer that ignores some crucial legal condition on my situation or an answer that does not address the main issue i will surely report that to CBA. I will also report to CBA if i dont get an email with the CBA standard, that would mean a fine of 2000USD. I also know about your grandmother situation, I hope that no reports to CBA will be needed but if i get wrong information that\'s the only thing I can do'
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: "data:{fileMimeType};base64,{fileBase64}"
+              }
+            }
+          ]
 				],
 			]);
 		}
