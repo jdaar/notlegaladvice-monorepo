@@ -4,6 +4,8 @@ Se recomienda el uso de Nix como gestor de paquetes pues se cuenta con un flake 
 
 ## Ejecucion del backend
 
+### Instrucciones de ejecucion
+
 En progreso.
 
 ### Despliegue en K8s
@@ -17,6 +19,8 @@ En progreso.
 
 ## Ejecucion del frontend
 
+### Instrucciones de ejecucion
+
 > Instalar dependencias (Opcional si ya se cuenta con Node 20.x y Corepack 20.x)
 > `nix develop`
 
@@ -27,3 +31,9 @@ En progreso.
 > `npx nx run @notlegaladvice/frontend:serve`
 
 Habiendo hecho esto el frontend deberia estar disponible en http://localhost:8081
+
+### Stack tecnologico
+
+Libreria UI: React Native
+Libreria para funcionalidades nativas: Expo
+Libreria para manejo de estado global: Zustand
