@@ -34,6 +34,6 @@ Habiendo hecho esto el frontend deberia estar disponible en http://localhost:808
 
 ### Stack tecnologico
 
-Libreria UI: React Native
-Libreria para funcionalidades nativas: Expo
-Libreria para manejo de estado global: Zustand
+- Libreria UI: React Native
+- Libreria para funcionalidades nativas: Expo
+- Libreria para manejo de estado global: Zustand
