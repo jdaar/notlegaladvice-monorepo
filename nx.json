@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "sync": {
+    "applyChanges": true
+  },
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
