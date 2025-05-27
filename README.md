@@ -26,10 +26,13 @@ En progreso.
 ### Despliegue en K8s
 
 > Crear imagen (ejecutar desde el root del projecto de Git)
+
 > podman build -t notlegaladvice-server:latest -f deployment/Dockerfile
 
 > Crear recursos de K8s
+
 > kind load docker-image localhost/notlegaladvice-server:latest
+
 > kubectl apply -f deployment/cluster/...
 
 ## Ejecucion del frontend
