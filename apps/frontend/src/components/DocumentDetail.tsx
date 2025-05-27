@@ -1,14 +1,63 @@
 import { StyleSheet, View, Text } from "react-native";
 import Theme from "../common/Theme";
 import { useDocumentStore } from "../state/store";
-
-type Document = {}
+import { Document } from "../state/store";
+import Button from "../common/Button";
 
 const DocumentDetailEmptyMessage = () => {
   return (
     <View style={styles.emptyDetailContainer}>
       <Text style={styles.emptyDetailTitle}>Nada que ver por aqui...</Text>
       <Text style={styles.emptyDetailSubtitle}>Selecciona un archivo para visualizar sus datos</Text>
+    </View>
+  )
+}
+
+const DocumentDetailMessage = ({data}: {data: Document}) => {
+  return (
+    <View style={styles.nonEmptyDetailContainer}>
+      <Text style={styles.detailTitle}>{data.title}</Text>
+      <Text style={styles.detailSubtitle}>Obligaciones</Text>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <Text style={styles.detailSubtitle}>Derechos</Text>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <Text style={styles.detailSubtitle}>Partes involucradas</Text>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <Text style={styles.detailSubtitle}>Condiciones economicas</Text>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <View style={styles.detailTextDecorationContainer}>
+        <View style={styles.detailTextDecoration} />
+        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button><Text style={styles.buttonText}>Descargar archivo</Text></Button>
+        <Button><Text style={styles.buttonText}>Deshabilitar archivo</Text></Button>
+        <Button><Text style={styles.buttonText}>Eliminar archivo</Text></Button>
+      </View>
     </View>
   )
 }
@@ -22,13 +71,25 @@ const DocumentDetail = () => {
         <DocumentDetailEmptyMessage />
       }
       {actualDocument != null &&
-        <Text style={styles.emptyDetailTitle}>{actualDocument.title}</Text>
+        <DocumentDetailMessage data={actualDocument}/>
       }
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  buttonContainer: {
+    width: '100%',
+    gap: Theme.spacing.extrasmall,
+    justifyContent: 'flex-end',
+    paddingVertical: Theme.spacing.large
+  },
+  buttonText: {
+    color: Theme.color.backgroundPrimary,
+    fontFamily: Theme.font.normal,
+    fontWeight: 'bold',
+    alignSelf: 'center'
+  },
   detailContainer: {
     padding: Theme.spacing.small,
     color: Theme.color.foregroundPrimary,
@@ -49,6 +110,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'column'
   },
+  nonEmptyDetailContainer: {
+    flex: 1,
+    gap: Theme.spacing.extrasmall,
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    height: '100%'
+  },
   emptyDetailTitle: {
     fontFamily: Theme.font.normal,
     fontSize: Theme.fontSize.medium,
@@ -57,7 +126,37 @@ const styles = StyleSheet.create({
   emptyDetailSubtitle: {
     fontFamily: Theme.font.normal,
     fontSize: Theme.fontSize.small,
-  }
+  },
+  detailTitle: {
+    fontFamily: Theme.font.normal,
+    fontSize: Theme.fontSize.medium,
+    fontWeight: '600'
+  },
+  detailSubtitle: {
+    fontFamily: Theme.font.normal,
+    fontSize: Theme.fontSize.small,
+    fontWeight: '600'
+  },
+  detailText: {
+    fontFamily: Theme.font.normal,
+    fontSize: Theme.fontSize.small,
+    fontWeight: 'normal'
+  },
+  detailTextDecorationContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: Theme.spacing.small,
+    maxHeight: 20
+  },
+  detailTextDecoration: {
+    width: 7,
+    height: 7,
+    borderRadius: '100%',
+    backgroundColor: Theme.color.foregroundPrimary
+  },
 })
 
 export default DocumentDetail;
+

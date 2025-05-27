@@ -5,7 +5,7 @@ type DocumentStore = {
   setSelectedDocument: (newDocument: Document) => void
 }
 
-type Document = {
+export type Document = {
   title: string
 }
 
