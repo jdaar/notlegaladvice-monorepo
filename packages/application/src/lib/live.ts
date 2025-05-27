@@ -27,8 +27,7 @@ const nodeSdkLive = Layer.unwrapEffect(Effect.gen(function* () {
 
 
 export const serviceLive = () =>
-	Layer.merge(LLMLives.typistAgentLive(), LLMLives.embeddingsLive).pipe(
-		Layer.merge(Layer.provide(LLMLives.vectorStoreLive, LLMLives.embeddingsLive)),
+	LLMLives.ocrAgentLive().pipe(
 		Layer.merge(nodeSdkLive),
 	)
 

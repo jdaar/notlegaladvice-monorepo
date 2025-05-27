@@ -1,34 +1,19 @@
-import type { ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings } from "@langchain/google-genai";
-import type { Effect } from "effect";
+/* eslint-disable @typescript-eslint/no-namespace */
 import { Context } from "effect";
-import type { MemoryVectorStore } from "langchain/vectorstores/memory";
 import type { FastifyInstance } from "fastify";
+import { Ollama } from "@langchain/ollama";
 
 export namespace Services {
-	export class TypistAgentInstance extends Context.Tag("TypistAgentInstance")<
-		TypistAgentInstance,
-    ChatGoogleGenerativeAI
+	export class OCRAgentInstance extends Context.Tag("OCRAgentInstance")<
+		OCRAgentInstance,
+    Ollama
 	>() {}
 
-	export class EmbeddingsInstance extends Context.Tag("EmbeddingsInstance")<
-		EmbeddingsInstance,
-		GoogleGenerativeAIEmbeddings
-	>() {}
-
-	export class VectorStoreInstance extends Context.Tag("VectorStoreInstance")<
-		VectorStoreInstance,
-		MemoryVectorStore
-	>() {}
-
-	interface KeyValueStore {
-		readonly has: (key: string) => Effect.Effect<boolean, Error, never>;
-		readonly set: (key: string) => Effect.Effect<void, Error, never>;
-		readonly delete: (key: string) => Effect.Effect<void, Error, never>;
-	}
-
-	export class KeyValueStoreInstance extends Context.Tag("KeyValueStoreInstance")<
-		KeyValueStoreInstance,
-		KeyValueStore
+	export class PDFRenderer extends Context.Tag("PDFRenderer")<
+		PDFRenderer,
+		{
+			readonly renderPDFToImages: (pdfBytes: Uint8Array) => Promise<Array<Uint8Array>>
+		}
 	>() {}
 }
 

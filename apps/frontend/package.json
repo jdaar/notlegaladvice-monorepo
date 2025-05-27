@@ -1,0 +1,17 @@
+{
+  "name": "@notlegaladvice/frontend",
+  "version": "0.0.1",
+  "private": true,
+  "nx": {
+    "name": "@notlegaladvice/frontend"
+  },
+  "scripts": {
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "expo": "~52.0.46",
+    "react": "18.3.1",
+    "react-native": "0.76.9"
+  }
+}

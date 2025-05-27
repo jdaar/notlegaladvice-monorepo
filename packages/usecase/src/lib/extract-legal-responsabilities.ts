@@ -19,7 +19,7 @@ export class ExtractLegalAdviceUseCase extends Context.Tag("ExtractLegalAdviceUs
 		Errors.UnableToCreateStream |
 		Errors.UnableToParseFile |
 		Errors.UnableToCreateSink,
-		Services.TypistAgentInstance
+		Services.OCRAgentInstance
 	>
 >() {}
 
@@ -46,7 +46,7 @@ function extractLegalAdvice(
 				Effect.catchAll(error => Effect.fail(new Errors.UnableToInvokeTemplate({cause: error})))
 			);
 
-		const llm = yield* Services.TypistAgentInstance
+		const llm = yield* Services.OCRAgentInstance
 
 		yield* Effect.promise(() => llm.invoke(prompt))
 

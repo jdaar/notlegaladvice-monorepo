@@ -1,7 +1,45 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 
 export namespace Prompts {
 	export class Templates {
+    public static get extractTextFromFileViaOCR() {
+      return ChatPromptTemplate.fromMessages([
+        [
+          "system",
+          `
+You are a typist for the government. Your job is to take in files and accurately transcribe their contents exactly as they appear in the files.
+You must format your response as a valid JSON object with a single "fileContent" field containing the full text content as a string.
+
+Example response format:
+{
+  "fileContent": "This is the full text from the document, preserving all formatting and content."
+}
+
+Do not add any content that is not in the original file, and ensure all content is included within the JSON structure.
+          `
+        ],
+				[
+					"user",
+          [
+            {
+              type: "text",
+              text: `
+Analyze the text in the provided image. Extract all readable content from the document and include it in your response as a JSON object with a "fileContent" field.
+Preserve the original structure and formatting of the content as much as possible within the "fileContent" string.
+              `
+            },
+            {
+              type: "image_url",
+              image_url: {
+                url: "data:{fileMimeType};base64,{fileBase64}"
+              }
+            }
+          ]
+				],
+      ])
+    }
+
 		public static get applyCBAStandardFormat() {
 			return ChatPromptTemplate.fromMessages([
 				[

@@ -35,6 +35,15 @@
     },
     {
       "path": "./packages/usecase"
+    },
+    {
+      "path": "./packages/playwright"
+    },
+    {
+      "path": "./apps"
+    },
+    {
+      "path": "./apps/frontend"
     }
   ]
 }

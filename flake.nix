@@ -56,6 +56,7 @@
             export OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger-collector-service:4317
             export OTEL_SERVICE_NAME=notlegaladvice
             export GOOGLE_API_KEY=AIzaSyBOpZAMMJz2Amo2vGguySqnwv9uBLwKiOY
+            export MONGO_USER_PASSWORD=m9MG1uRAFnkiYTxn
 
             exec npx nx run @notlegaladvice/server:serve:development "$@"
           '';

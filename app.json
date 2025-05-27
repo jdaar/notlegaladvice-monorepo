@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "expo-font"
+  ],
+  "android": {
+    "package": "com.anonymous.notlegaladvicesource"
+  },
+  "ios": {
+    "bundleIdentifier": "com.anonymous.notlegaladvicesource"
+  }
+}

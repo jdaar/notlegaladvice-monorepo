@@ -5,9 +5,7 @@ import { ExtractLegalAdviceUseCase } from "@notlegaladvice/usecase";
 
 export namespace Contexts {
 	export type UseCaseContext =
-		Services.TypistAgentInstance |
-		Services.EmbeddingsInstance |
-		Services.VectorStoreInstance;
+		Services.OCRAgentInstance;
 
 	export type HandlerContext = ExtractLegalAdviceUseCase;
 
