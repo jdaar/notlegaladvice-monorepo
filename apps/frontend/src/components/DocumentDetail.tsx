@@ -27,10 +27,10 @@ const TextList = ({text}: {text: Array<string>}) => {
       <FlatList
           pagingEnabled={false}
           style={styles.detailListContainer}
-          data={text.map(textItem => ({data: textItem}))}
+          data={text.map(textItem => ({data: textItem, id: Math.random().toString()}))}
           numColumns={1}
           renderItem={item => <TextListElement text={item.item.data}/>}
-          keyExtractor={item => item.data}
+          keyExtractor={item => item.data.concat(item.id)}
       />
     )
 }
@@ -41,11 +41,11 @@ const DocumentDetailMessage = ({data}: {data: Document}) => {
       <ScrollView style={{height: '100%', width: '100%'}} contentContainerStyle={styles.detailListScrollContainer}>
         <Text style={styles.detailTitle}>{data.title}</Text>
         <Text style={styles.detailSubtitle}>Obligaciones</Text>
-        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <TextList text={new Array(5).fill(null).map(_ => "prueba")}/>
         <Text style={styles.detailSubtitle}>Derechos</Text>
-        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <TextList text={new Array(5).fill(null).map(_ => "prueba")}/>
         <Text style={styles.detailSubtitle}>Partes involucradas</Text>
-        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <TextList text={new Array(5).fill(null).map(_ => "prueba")}/>
         <Text style={styles.detailSubtitle}>Condiciones economicas</Text>
         <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
         <View style={styles.buttonContainer}>

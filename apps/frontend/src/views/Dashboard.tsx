@@ -26,6 +26,8 @@ const Dashboard = () => {
     )
   }, [])
 
+  const isMobileLayout = dimensions.width > 800
+
   return (
     <FontProvider>
       <WrappedView>
@@ -36,9 +38,9 @@ const Dashboard = () => {
           <View>
             <DocumentSummary/>
           </View>
-          <View style={{...styles.documentDataContainer, flexDirection: dimensions.width > 800 ? 'row' : 'column'}}>
+          <View style={{...styles.documentDataContainer, flexDirection: isMobileLayout ? 'row' : 'column'}}>
             <DocumentList/>
-            <View style={dimensions.width > 800 ? styles.documentDetailContainer : styles.documentDetailContainerVertical}>
+            <View style={isMobileLayout ? styles.documentDetailContainer : styles.documentDetailContainerVertical}>
             <DocumentDetail/>
             </View>
           </View>

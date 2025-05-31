@@ -1,14 +1,14 @@
-import { Text, StyleSheet, View, LayoutChangeEvent, Image } from "react-native";
+import { Text, StyleSheet, View, LayoutChangeEvent, Image, Dimensions } from "react-native";
 import Theme from "../common/Theme";
 import Button from "../common/Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const [headerHeight, setHeaderHeight] = useState(-1);
 
   const handleHeaderContainerOnLayout = (event: LayoutChangeEvent) => {
     const { height } = event.nativeEvent.layout;
-    if (headerHeight == -1)
+    if (headerHeight == -1 || headerHeight != height)
       setHeaderHeight(height);
   }
 

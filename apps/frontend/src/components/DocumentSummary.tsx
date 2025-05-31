@@ -1,5 +1,5 @@
 import { getDocumentAsync } from 'expo-document-picker';
-import { Dimensions, GestureResponderEvent, LayoutChangeEvent, StyleSheet, Text, View } from "react-native";
+import { Dimensions, GestureResponderEvent, StyleSheet, Text, View } from "react-native";
 import Theme from "../common/Theme";
 import { useEffect, useState } from "react";
 import Button from "../common/Button";
@@ -41,12 +41,14 @@ const DocumentSummary = () => {
     }
   }
 
+  const isMobileLayout = dimensions.width < 715
+
   return (
-    <View style={styles.summaryContainer}>
+    <View style={{...styles.summaryContainer, flexDirection: !isMobileLayout ? 'row' : 'column'}}>
       <View style={styles.summaryLeftSideContainer}>
         <Text style={styles.summaryTitle}>Ahora mismo cuentas con</Text>
         {
-          dimensions.width > 715 ?
+           !isMobileLayout ?
             (
             <View style={styles.metricContainer}>
               <Text style={{...styles.metricContent, paddingLeft: 0}}>7 archivos</Text>
@@ -85,9 +87,10 @@ const styles = StyleSheet.create({
     marginLeft: Theme.spacing.large,
     marginRight: Theme.spacing.large,
     flex: 1,
+    gap: Theme.spacing.medium,
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   summaryTitle: {
     fontFamily: Theme.font.normal,
@@ -106,6 +109,7 @@ const styles = StyleSheet.create({
   summaryLeftSideContainer: {
     flex: 1,
     gap: Theme.spacing.extrasmall,
+    width: '100%',
     flexDirection: 'column'
   },
   metricContent: {
