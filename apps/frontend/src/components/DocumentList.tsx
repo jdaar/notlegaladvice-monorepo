@@ -4,7 +4,7 @@ import DocumentCard from "./DocumentCard";
 import { useEffect, useMemo, useState } from "react";
 
 const mockData = {
-  documentTitle: "Terminos y condiciones de servicio de salud EMI",
+  documentTitle: "Terminos y condiciones de servicio de salud EMIaaaaaaa aaaaaaaaaaa aaaaaaaaaaa a aaaaaaaaaaaa a aaa aaaaaaaaaaa",
   involvedPartsCount: 2,
   obligationsCount: 2,
   rightsCount: 1,
@@ -35,6 +35,14 @@ const DocumentList = () => {
     )
   }, [])
 
+  const [documentListWidth, setDocumentListWidth] = useState(-1);
+
+  const handleDocumentListContainerOnLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout;
+    if (documentListWidth == -1 || documentListWidth != width)
+      setDocumentListWidth(width);
+  }
+
   const data = useMemo(() => new Array(100).fill(0).map(_ => ({data: {...mockData, id: Math.random().toString()}})), [])
 
   return (
@@ -43,8 +51,9 @@ const DocumentList = () => {
           style={styles.documentsListContainer}
           contentContainerStyle={styles.documentsListItemContainer}
           data={data}
+          onLayout={handleDocumentListContainerOnLayout}
           numColumns={calculateColumnNumber(dimensions.width)}
-          renderItem={item => <DocumentCard data={item.item.data}/>}
+          renderItem={item => <DocumentCard data={item.item.data} style={{maxWidth: documentListWidth / calculateColumnNumber(dimensions.width), minHeight: 375}}/>}
           keyExtractor={item => item.data.documentTitle.concat(item.data.id)}
           key={calculateColumnNumber(dimensions.width)}
         />

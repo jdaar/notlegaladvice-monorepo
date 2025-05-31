@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    minHeight: 350
   },
   cardContainer: {
     backgroundColor: Theme.color.foregroundSecondary,
@@ -66,7 +65,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     height: '100%',
     width: '100%',
-    minHeight: 350
+    minHeight: 35
   },
   cardImageContainer: {
     height: '50%',
@@ -76,7 +75,8 @@ const styles = StyleSheet.create({
     padding: Theme.spacing.small,
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    width: '100%'
   },
   cardDetailTitle: {
     fontFamily: Theme.font.normal,
