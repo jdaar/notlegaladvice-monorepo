@@ -53,8 +53,8 @@
         export GOOGLE_AI_MODEL=gemini-2.0-flash
         export OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger-collector-service:4317
         export OTEL_SERVICE_NAME=notlegaladvice
-        export GOOGLE_API_KEY=<YOUR-GOOGLE-API-KEY>
-        export MONGO_USER_PASSWORD=<YOUR-MONGO-USER-PASSWORD>
+        export GOOGLE_API_KEY=aaaa
+        export MONGO_USER_PASSWORD=aaaa
 
         exec npx nx run @notlegaladvice/server:serve:development "$@"
       '';

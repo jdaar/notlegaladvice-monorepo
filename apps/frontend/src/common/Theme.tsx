@@ -25,6 +25,12 @@ const Theme = {
     button: 3,
     card: 3,
     separator: 2
+  },
+  mediaQueries: {
+    table: {
+      twoColumn: 1100,
+      threeColumn: 1700
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, FlatList, ScrollView } from "react-native";
 import Theme from "../common/Theme";
 import { useDocumentStore } from "../state/store";
 import { Document } from "../state/store";
@@ -13,51 +13,47 @@ const DocumentDetailEmptyMessage = () => {
   )
 }
 
+const TextListElement = ({text}: {text: string}) => {
+  return (
+    <View style={styles.detailTextDecorationContainer}>
+      <View style={styles.detailTextDecoration} />
+      <Text style={styles.detailText}>{text}</Text>
+    </View>
+  )
+}
+
+const TextList = ({text}: {text: Array<string>}) => {
+    return (
+      <FlatList
+          pagingEnabled={false}
+          style={styles.detailListContainer}
+          data={text.map(textItem => ({data: textItem}))}
+          numColumns={1}
+          renderItem={item => <TextListElement text={item.item.data}/>}
+          keyExtractor={item => item.data}
+      />
+    )
+}
+
 const DocumentDetailMessage = ({data}: {data: Document}) => {
   return (
     <View style={styles.nonEmptyDetailContainer}>
-      <Text style={styles.detailTitle}>{data.title}</Text>
-      <Text style={styles.detailSubtitle}>Obligaciones</Text>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <Text style={styles.detailSubtitle}>Derechos</Text>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <Text style={styles.detailSubtitle}>Partes involucradas</Text>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <Text style={styles.detailSubtitle}>Condiciones economicas</Text>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <View style={styles.detailTextDecorationContainer}>
-        <View style={styles.detailTextDecoration} />
-        <Text style={styles.detailText}>Uso correcto de la plataforma virtual</Text>
-      </View>
-      <View style={styles.buttonContainer}>
-        <Button><Text style={styles.buttonText}>Descargar archivo</Text></Button>
-        <Button><Text style={styles.buttonText}>Deshabilitar archivo</Text></Button>
-        <Button><Text style={styles.buttonText}>Eliminar archivo</Text></Button>
-      </View>
+      <ScrollView style={{height: '100%', width: '100%'}} contentContainerStyle={styles.detailListScrollContainer}>
+        <Text style={styles.detailTitle}>{data.title}</Text>
+        <Text style={styles.detailSubtitle}>Obligaciones</Text>
+        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <Text style={styles.detailSubtitle}>Derechos</Text>
+        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <Text style={styles.detailSubtitle}>Partes involucradas</Text>
+        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <Text style={styles.detailSubtitle}>Condiciones economicas</Text>
+        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <View style={styles.buttonContainer}>
+          <Button><Text style={styles.buttonText}>Descargar archivo</Text></Button>
+          <Button><Text style={styles.buttonText}>Deshabilitar archivo</Text></Button>
+          <Button><Text style={styles.buttonText}>Eliminar archivo</Text></Button>
+        </View>
+      </ScrollView>
     </View>
   )
 }
@@ -135,6 +131,7 @@ const styles = StyleSheet.create({
   detailSubtitle: {
     fontFamily: Theme.font.normal,
     fontSize: Theme.fontSize.small,
+    padding: Theme.spacing.medium,
     fontWeight: '600'
   },
   detailText: {
@@ -142,10 +139,14 @@ const styles = StyleSheet.create({
     fontSize: Theme.fontSize.small,
     fontWeight: 'normal'
   },
+  detailListScrollContainer: {
+    flex: 1,
+    width: '100%',
+  },
   detailTextDecorationContainer: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     gap: Theme.spacing.small,
     maxHeight: 20
@@ -156,6 +157,11 @@ const styles = StyleSheet.create({
     borderRadius: '100%',
     backgroundColor: Theme.color.foregroundPrimary
   },
+  detailListContainer: {
+    height: '100%',
+    minHeight: 100,
+    paddingLeft: Theme.spacing.medium
+  }
 })
 
 export default DocumentDetail;

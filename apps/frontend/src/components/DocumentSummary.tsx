@@ -1,18 +1,27 @@
 import { getDocumentAsync } from 'expo-document-picker';
-import { GestureResponderEvent, LayoutChangeEvent, StyleSheet, Text, View } from "react-native";
+import { Dimensions, GestureResponderEvent, LayoutChangeEvent, StyleSheet, Text, View } from "react-native";
 import Theme from "../common/Theme";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../common/Button";
 import { Toast } from 'toastify-react-native';
 
 const DocumentSummary = () => {
-  const [metricContainerHeight, setMetricContainerHeight] = useState(-1);
+  const [dimensions, setDimensions] = useState<{
+    width: number
+  }>({
+    width: Dimensions.get("window").width
+  });
 
-  const handleMetricContainerOnLayout = (event: LayoutChangeEvent) => {
-    const { height } = event.nativeEvent.layout;
-    if (metricContainerHeight == -1)
-      setMetricContainerHeight(height);
-  }
+  useEffect(() => {
+    Dimensions.addEventListener(
+      "change",
+      ({window}) => {
+        setDimensions({
+          width: window.width
+        })
+      }
+    )
+  }, [])
 
   const [isUploading, setIsUploading] = useState(false);
 
@@ -36,15 +45,27 @@ const DocumentSummary = () => {
     <View style={styles.summaryContainer}>
       <View style={styles.summaryLeftSideContainer}>
         <Text style={styles.summaryTitle}>Ahora mismo cuentas con</Text>
-        <View style={styles.metricContainer} onLayout={handleMetricContainerOnLayout}>
-          <Text style={{...styles.metricContent, paddingLeft: 0}}>7 archivos</Text>
-          <View style={{...styles.metricSeparator, height: metricContainerHeight}}/>
-          <Text style={styles.metricContent}>32 obligaciones con un total de 12 partes involucradas</Text>
-          <View style={{...styles.metricSeparator, height: metricContainerHeight}}/>
-          <Text style={styles.metricContent}>15 derechos con un total de 13 partes involucradas</Text>
-          <View style={{...styles.metricSeparator, height: metricContainerHeight}}/>
-          <Text style={{...styles.metricContent, paddingRight: 0}}>Un total de -$1.000.000 en condiciones economicas</Text>
-        </View>
+        {
+          dimensions.width > 715 ?
+            (
+            <View style={styles.metricContainer}>
+              <Text style={{...styles.metricContent, paddingLeft: 0}}>7 archivos</Text>
+              <View style={{...styles.metricSeparator, height: 30}}/>
+              <Text style={styles.metricContent}>32 obligaciones con un total de 12 partes involucradas</Text>
+              <View style={{...styles.metricSeparator, height: 30}}/>
+              <Text style={styles.metricContent}>15 derechos con un total de 13 partes involucradas</Text>
+              <View style={{...styles.metricSeparator, height: 30}}/>
+              <Text style={{...styles.metricContent, paddingRight: 0}}>Un total de -$1.000.000 en condiciones economicas</Text>
+            </View>
+            ) : (
+            <View style={styles.metricContainerVertical}>
+              <Text style={{...styles.metricContent}}>• 7 archivos</Text>
+              <Text style={styles.metricContent}>• 32 obligaciones con un total de 12 partes involucradas</Text>
+              <Text style={styles.metricContent}>• 15 derechos con un total de 13 partes involucradas</Text>
+              <Text style={{...styles.metricContent}}>• Un total de -$1.000.000 en condiciones economicas</Text>
+            </View>
+            )
+        }
       </View>
       <Button>
         <Text style={styles.buttonText} onPress={handleUploadFileOnPress}>Subir archivo</Text>
@@ -77,6 +98,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  metricContainerVertical: {
+    flex: 1,
+    alignItems: 'flex-start'
   },
   summaryLeftSideContainer: {
     flex: 1,

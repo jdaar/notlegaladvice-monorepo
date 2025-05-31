@@ -1,6 +1,7 @@
-import { StyleSheet, View, Image, Text, TouchableOpacity, ViewStyle, GestureResponderEvent } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, ViewStyle, Image, GestureResponderEvent } from "react-native";
 import Theme from "../common/Theme";
 import { useDocumentStore } from "../state/store";
+import { useCallback } from "react";
 
 type DocumentCardDataProp = {
   documentTitle: string;
@@ -12,11 +13,12 @@ type DocumentCardDataProp = {
 
 const DocumentCard = ({style, data}: {style?: ViewStyle, data: DocumentCardDataProp}) => {
   const setSelectedDocument = useDocumentStore(store => store.setSelectedDocument);
-
-  const handleCardOnPress = (event: GestureResponderEvent) => {
+  const handleCardOnPress = useCallback((_: GestureResponderEvent) => {
     setSelectedDocument({title: data.documentTitle})
-  }
+  }, []);
 
+  /*
+        */
   return (
     <TouchableOpacity onPress={handleCardOnPress}>
       <View style={{...styles.cardContainer, ...style}}>
@@ -48,6 +50,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     height: '100%',
+    width: '100%',
     minHeight: 350
   },
   cardImageContainer: {

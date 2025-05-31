@@ -1,7 +1,7 @@
-import { FlatList, LayoutChangeEvent, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, FlatList, LayoutChangeEvent, ScrollView, StyleSheet, View } from "react-native";
 import Theme from "../common/Theme";
 import DocumentCard from "./DocumentCard";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const mockData = {
   documentTitle: "Terminos y condiciones de servicio de salud EMI",
@@ -11,15 +11,42 @@ const mockData = {
   economicConditionsSum: 100_000
 }
 
+const calculateColumnNumber = (windowWidth: number) => {
+  const isOneColumn = windowWidth > 0 && windowWidth < Theme.mediaQueries.table.twoColumn;
+  const isTwoColumn = windowWidth > Theme.mediaQueries.table.twoColumn && windowWidth < Theme.mediaQueries.table.threeColumn;
+  return isOneColumn ? 1 : (isTwoColumn ? 2 : 3);
+}
+
 const DocumentList = () => {
+  const [dimensions, setDimensions] = useState<{
+    width: number
+  }>({
+    width: Dimensions.get("window").width
+  });
+
+  useEffect(() => {
+    Dimensions.addEventListener(
+      "change",
+      ({window}) => {
+        setDimensions({
+          width: window.width
+        })
+      }
+    )
+  }, [])
+
+  const data = useMemo(() => new Array(100).fill(0).map(_ => ({data: {...mockData, id: Math.random().toString()}})), [])
+
   return (
       <ScrollView contentContainerStyle={styles.documentsContainer}>
         <FlatList
           style={styles.documentsListContainer}
-          data={new Array(100).fill(0).map(_ => ({data: mockData}))}
-          numColumns={3}
+          contentContainerStyle={styles.documentsListItemContainer}
+          data={data}
+          numColumns={calculateColumnNumber(dimensions.width)}
           renderItem={item => <DocumentCard data={item.item.data}/>}
-          keyExtractor={item => item.data.documentTitle}
+          keyExtractor={item => item.data.documentTitle.concat(item.data.id)}
+          key={calculateColumnNumber(dimensions.width)}
         />
       </ScrollView>
   );
@@ -42,6 +69,13 @@ const styles = StyleSheet.create({
   },
   documentsListContainer: {
     flex: 1,
+    height: '100%',
+    gap: Theme.spacing.small,
+    width: '100%'
+  },
+  documentsListItemContainer: {
+    flex: 1,
+    alignItems: 'stretch',
     height: '100%',
     gap: Theme.spacing.small,
     width: '100%'

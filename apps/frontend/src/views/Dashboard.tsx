@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import WrappedView from '../common/WrappedView';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { Dimensions, StyleSheet, View } from 'react-native';
 import Header from '../components/Header';
 import DocumentList from '../components/DocumentList';
 import FontProvider from '../providers/FontProvider';
@@ -9,6 +9,23 @@ import DocumentDetail from '../components/DocumentDetail';
 import Theme from '../common/Theme';
 
 const Dashboard = () => {
+  const [dimensions, setDimensions] = useState<{
+    width: number
+  }>({
+    width: Dimensions.get("window").width
+  });
+
+  useEffect(() => {
+    Dimensions.addEventListener(
+      "change",
+      ({window}) => {
+        setDimensions({
+          width: window.width
+        })
+      }
+    )
+  }, [])
+
   return (
     <FontProvider>
       <WrappedView>
@@ -19,9 +36,9 @@ const Dashboard = () => {
           <View>
             <DocumentSummary/>
           </View>
-          <View style={styles.documentDataContainer}>
+          <View style={{...styles.documentDataContainer, flexDirection: dimensions.width > 800 ? 'row' : 'column'}}>
             <DocumentList/>
-            <View style={styles.documentDetailContainer}>
+            <View style={dimensions.width > 800 ? styles.documentDetailContainer : styles.documentDetailContainerVertical}>
             <DocumentDetail/>
             </View>
           </View>
@@ -44,6 +61,10 @@ const styles = StyleSheet.create({
   },
   documentDetailContainer: {
     width: '30%'
+  },
+  documentDetailContainerVertical: {
+    width: '100%',
+    maxHeight: 300
   }
 })
 
