@@ -6,6 +6,7 @@ type DocumentStore = {
 }
 
 export type Document = {
+  id: string,
   title: string
 }
 
