@@ -1,6 +1,8 @@
 import { Effect } from 'effect';
 import { Contexts, execute } from '@notlegaladvice/application'
 import { FastifyRequest, FastifyInstance } from 'fastify';
+import { ErrorResponse } from '@notlegaladvice/data';
+import { Errors } from '@notlegaladvice/data';
 
 /*
 function convertSchemaToJsonSchema<E, D, R>(
@@ -41,7 +43,13 @@ export function createUnboundSchemaHttpHandlerSuscriptor<I, E, R>(handler: (requ
             },
           })
         );
-        return execute(effectWithSpan);
+        return execute(
+          effectWithSpan.pipe(
+            Effect.catchAll((error) => {
+              return Effect.succeed(ErrorResponse((error as {cause: Error}).cause.toString(), (error as {_tag: string})._tag as Errors.Code))
+            })
+          )
+        );
       }
     });
   }

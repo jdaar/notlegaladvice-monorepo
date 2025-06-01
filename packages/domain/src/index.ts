@@ -1,2 +1,2 @@
-export * from './lib/interfaces.js';
-export * from './lib/entities.js';
+export * from './lib/interface.js';
+export * from './lib/entity.js';

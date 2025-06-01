@@ -11,6 +11,12 @@ export namespace Errors {
 		UnableToParseLLMOutput = "UNABLE_TO_PARSE_LLM_OUTPUT",
 		UnableToConvertFileToBase64 = "UNABLE_TO_CONVERT_FILE_TO_BASE64",
 		UnableToConvertPDFToImage = "UNABLE_TO_CONVERT_PDF_TO_IMAGE",
+		UnableToConnectToDatabase = "UNABLE_TO_CONNECT_TO_DATABASE",
+		UnableToInsertIntoDatabase = "UNABLE_TO_INSERT_INTO_DATABASE",
+		UnableToRetrieveFromDatabase = "UNABLE_TO_RETRIEVE_FROM_DATABASE",
+		UnableToCreateLegalDocument = "UNABLE_TO_CREATE_LEGAL_DOCUMENT",
+		UnableToGetLegalDocuments = "UNABLE_TO_GET_LEGAL_DOCUMENTS",
+    UnableToExecuteLLMExtractionPipeline = "UNABLE_TO_EXECUTE_LLM_EXTRACTION_PIPELINE",
 		Unidentified = "UNIDENTIFIED"
 	}
 
@@ -36,6 +42,24 @@ export namespace Errors {
 		cause: Error
 	}>{}
 	export class UnableToConsumeStream extends Data.TaggedError(Code.UnableToConsumeStream)<{
+		cause: Error
+	}>{}
+	export class UnableToConnectToDatabase extends Data.TaggedError(Code.UnableToConnectToDatabase)<{
+		cause: Error
+	}>{}
+	export class UnableToInsertIntoDatabase extends Data.TaggedError(Code.UnableToConnectToDatabase)<{
+		cause: Error
+	}>{}
+	export class UnableToRetrieveFromDatabase extends Data.TaggedError(Code.UnableToRetrieveFromDatabase)<{
+		cause: Error
+	}>{}
+	export class UnableToCreateLegalDocument extends Data.TaggedError(Code.UnableToCreateLegalDocument)<{
+		cause: Error
+	}>{}
+	export class UnableToGetLegalDocuments extends Data.TaggedError(Code.UnableToGetLegalDocuments)<{
+		cause: Error
+	}>{}
+	export class UnableToExecuteLLMExtractionPipeline extends Data.TaggedError(Code.UnableToExecuteLLMExtractionPipeline)<{
 		cause: Error
 	}>{}
 }

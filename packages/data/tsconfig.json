@@ -4,6 +4,9 @@
   "include": [],
   "references": [
     {
+      "path": "../llm-integration"
+    },
+    {
       "path": "./tsconfig.lib.json"
     },
     {

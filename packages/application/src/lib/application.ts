@@ -1,13 +1,20 @@
 import { Services } from "@notlegaladvice/domain"
 import { Effect } from "effect";
 import { mainLive } from "./live.js";
-import { ExtractLegalAdviceUseCase } from "@notlegaladvice/usecase";
+import { Placeholder, GetLegalDocuments, CreateLegalDocument, ExecuteLLMExtractionFromDocument } from "@notlegaladvice/usecase";
+
 
 export namespace Contexts {
 	export type UseCaseContext =
-		Services.OCRAgentInstance;
+    Services.DatabaseClientInstance |
+    Services.LegalDocumentRepository |
+		Services.OCRAgentInstance |
+    Services.AgentCompletionInstance;
 
-	export type HandlerContext = ExtractLegalAdviceUseCase;
+	export type HandlerContext = Placeholder
+  | GetLegalDocuments
+  | CreateLegalDocument
+  | ExecuteLLMExtractionFromDocument;
 
 	export type ApplicationContext = UseCaseContext | HandlerContext;
 }
@@ -19,6 +26,8 @@ export function execute<D, E>(
 		Contexts.ApplicationContext
   >,
 ) {
-  return Effect.runPromise(Effect.provide(effect, mainLive()));
+  return Effect.runPromise(
+    Effect.provide(effect, mainLive())
+  );
 }
 

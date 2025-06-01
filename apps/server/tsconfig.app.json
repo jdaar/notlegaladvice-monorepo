@@ -20,6 +20,9 @@
   ],
   "references": [
     {
+      "path": "../../packages/llm-integration/tsconfig.lib.json"
+    },
+    {
       "path": "../../packages/usecase/tsconfig.lib.json"
     },
     {

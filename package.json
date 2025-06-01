@@ -15,7 +15,7 @@
     "@fastify/multipart": "^9.0.3",
     "@fastify/sensible": "~6.0.2",
     "@fastify/websocket": "^11.0.2",
-    "@langchain/core": "^0.3.43",
+    "@langchain/core": "^0.3.57",
     "@langchain/google-genai": "^0.2.2",
     "@langchain/mongodb": "^0.1.0",
     "@langchain/ollama": "^0.2.0",
@@ -46,6 +46,7 @@
     "react-dom": "~18.3.1",
     "react-native": "~0.76.3",
     "toastify-react-native": "^7.2.0",
+    "zod": "^3.25.42",
     "zustand": "^5.0.5"
   },
   "devDependencies": {

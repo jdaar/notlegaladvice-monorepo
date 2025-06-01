@@ -1,3 +1,4 @@
+/*
 import { Context, Effect, Layer } from "effect";
 import { Services } from "@notlegaladvice/domain";
 import { Errors } from "@notlegaladvice/data";
@@ -16,7 +17,7 @@ export class ConvertPDFToImageArray extends Context.Tag("ConvertPDFToImageArray"
 function convertPDFToImageArray(pdfBytes: Uint8Array) {
   return Effect.gen(function* () {
     const pdfRenderer = yield* Services.PDFRenderer;
-    
+
     const images = yield* Effect.tryPromise({
       try: () => pdfRenderer.renderPDFToImages(pdfBytes),
       catch: (error) => new Errors.UnableToConvertPDFToImage({
@@ -28,7 +29,7 @@ function convertPDFToImageArray(pdfBytes: Uint8Array) {
       Effect.withSpan("pdf_to_images_conversion"),
       Effect.catchAll(error => Effect.fail(new Errors.UnableToConvertPDFToImage({cause: error})))
     );
-    
+
     return images;
   });
 }
@@ -37,3 +38,4 @@ export const convertPDFToImageArrayLive = Layer.succeed(
   ConvertPDFToImageArray,
   ConvertPDFToImageArray.of(convertPDFToImageArray)
 );
+*/

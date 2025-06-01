@@ -1,5 +1,6 @@
+/*
 import { Context, Effect, Layer } from "effect";
-import { DomainEntities, Services } from "@notlegaladvice/domain";
+import { Services } from "@notlegaladvice/domain";
 import { Prompts } from "@notlegaladvice/llm-integration";
 import { Errors } from "@notlegaladvice/data";
 import { Streaming } from "@notlegaladvice/streaming";
@@ -84,7 +85,7 @@ function extractTextFromFileViaOCR(
           cause: new Error('LLM response does not contain valid fileContent field')
         }));
       }
-      
+
       return parsedResult.fileContent;
     } catch (error) {
       return yield* Effect.fail(new Errors.UnableToParseLLMOutput({
@@ -98,4 +99,4 @@ export const extractTextFromFileViaOCRLive = Layer.succeed(
   ExtractTextFromFileViaOCR,
   ExtractTextFromFileViaOCR.of(extractTextFromFileViaOCR)
 );
-
+*/

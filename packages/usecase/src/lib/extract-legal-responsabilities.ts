@@ -1,3 +1,4 @@
+/*
 import { Context, Effect, Layer, Stream } from "effect";
 import { DomainEntities, Services } from "@notlegaladvice/domain";
 import { Streaming } from "@notlegaladvice/streaming";
@@ -89,4 +90,4 @@ export const extractLegalAdviceLive = Layer.succeed(
 	ExtractLegalAdviceUseCase,
 	ExtractLegalAdviceUseCase.of(extractLegalAdvice)
 )
-
+*/
