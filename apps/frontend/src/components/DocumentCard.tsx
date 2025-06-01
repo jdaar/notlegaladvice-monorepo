@@ -2,26 +2,18 @@ import { StyleSheet, View, Text, TouchableOpacity, ViewStyle, Image, GestureResp
 import Theme from "../common/Theme";
 import { useDocumentStore } from "../state/store";
 import { useCallback, useMemo } from "react";
-
-type DocumentCardDataProp = {
-  id: string;
-  documentTitle: string;
-  involvedPartsCount: number;
-  obligationsCount: number;
-  rightsCount: number;
-  economicConditionsSum: number;
-}
+import { DomainEntities } from "@notlegaladvice/domain";
 
 const SelectableSubtitle = ({isSelectedCard, text}: {isSelectedCard: boolean, text: string}) => <Text style={{...styles.cardDetailSubtitle, color: isSelectedCard ? Theme.color.foregroundPrimary : styles.cardDetailSubtitle.color}}>{text}</Text>
 
-const DocumentCard = ({style, data}: {style?: ViewStyle, data: DocumentCardDataProp}) => {
+const DocumentCard = ({style, data}: {style?: ViewStyle, data: DomainEntities.LegalDocument}) => {
   const selectedDocument = useDocumentStore(store => store.selectedDocument);
   const setSelectedDocument = useDocumentStore(store => store.setSelectedDocument);
   const handleCardOnPress = useCallback((_: GestureResponderEvent) => {
-    setSelectedDocument({title: data.documentTitle, id: data.id})
+    setSelectedDocument(data)
   }, []);
 
-  const isSelectedCard = useMemo(() => selectedDocument?.id == data.id, [selectedDocument])
+  const isSelectedCard = useMemo(() => selectedDocument !== null && (selectedDocument?.id == data.id), [selectedDocument])
 
   return (
     <TouchableOpacity onPress={handleCardOnPress}>
@@ -32,12 +24,12 @@ const DocumentCard = ({style, data}: {style?: ViewStyle, data: DocumentCardDataP
           }}/>
         </View>
         <View style={styles.cardDetailContainer}>
-          <Text style={{...styles.cardDetailTitle, color: isSelectedCard ? Theme.color.foregroundPrimary : styles.cardDetailTitle.color }}>{data.documentTitle}</Text>
+          <Text style={{...styles.cardDetailTitle, color: isSelectedCard ? Theme.color.foregroundPrimary : styles.cardDetailTitle.color }}>{data.title}</Text>
           <View style={{ gap: Theme.spacing.extrasmall }}>
-            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.involvedPartsCount} partes involucradas`}/>
-            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.obligationsCount} obligaciones`}/>
-            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.rightsCount} derechos`}/>
-            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`$${data.economicConditionsSum} en condiciones economicas`}/>
+            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.involvedParts.length} partes involucradas`}/>
+            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.obligations.length} obligaciones`}/>
+            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.rights.length} derechos`}/>
+            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`$${data.economicConditions.map(v => v.amount).reduce((acc, cur) => acc + cur)} en condiciones economicas`}/>
           </View>
         </View>
       </View>

@@ -1,15 +1,8 @@
-import { Dimensions, FlatList, LayoutChangeEvent, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, FlatList, LayoutChangeEvent, ScrollView, StyleSheet } from "react-native";
 import Theme from "../common/Theme";
 import DocumentCard from "./DocumentCard";
-import { useEffect, useMemo, useState } from "react";
-
-const mockData = {
-  documentTitle: "Terminos y condiciones de servicio de salud EMIaaaaaaa aaaaaaaaaaa aaaaaaaaaaa a aaaaaaaaaaaa a aaa aaaaaaaaaaa",
-  involvedPartsCount: 2,
-  obligationsCount: 2,
-  rightsCount: 1,
-  economicConditionsSum: 100_000
-}
+import { useEffect, useState } from "react";
+import { useDocumentStore } from "../state/store";
 
 const calculateColumnNumber = (windowWidth: number) => {
   const isOneColumn = windowWidth > 0 && windowWidth < Theme.mediaQueries.table.twoColumn;
@@ -18,6 +11,8 @@ const calculateColumnNumber = (windowWidth: number) => {
 }
 
 const DocumentList = () => {
+  const documents = useDocumentStore((state) => state.documents);
+
   const [dimensions, setDimensions] = useState<{
     width: number
   }>({
@@ -43,18 +38,16 @@ const DocumentList = () => {
       setDocumentListWidth(width);
   }
 
-  const data = useMemo(() => new Array(100).fill(0).map(_ => ({data: {...mockData, id: Math.random().toString()}})), [])
-
   return (
       <ScrollView contentContainerStyle={styles.documentsContainer}>
         <FlatList
           style={styles.documentsListContainer}
           contentContainerStyle={styles.documentsListItemContainer}
-          data={data}
+          data={documents?.map(v => ({data: v}))}
           onLayout={handleDocumentListContainerOnLayout}
           numColumns={calculateColumnNumber(dimensions.width)}
-          renderItem={item => <DocumentCard data={item.item.data} style={{maxWidth: documentListWidth / calculateColumnNumber(dimensions.width), minHeight: 375}}/>}
-          keyExtractor={item => item.data.documentTitle.concat(item.data.id)}
+          renderItem={item => <DocumentCard data={item.item.data} style={{width: documentListWidth / calculateColumnNumber(dimensions.width), minHeight: 375}}/>}
+          keyExtractor={item => item.data.objectives[0].concat(item.data.id!)}
           key={calculateColumnNumber(dimensions.width)}
         />
       </ScrollView>

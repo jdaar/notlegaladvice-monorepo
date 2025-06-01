@@ -30,5 +30,10 @@
     "eslint.config.cjs",
     "eslint.config.mjs"
   ],
-  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"],
+  "references": [
+    {
+      "path": "../../packages/domain"
+    }
+  ]
 }

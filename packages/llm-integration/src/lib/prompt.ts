@@ -23,6 +23,9 @@ ${ocrAnalisys}
 
 Fecha actual: ${currentDate}
 
+Complementa los contenidos del documento legal basado en tu conocimiento en leyes, principalmente en leyes enfocadas a los usuarios finales, personas naturales.
+Incluye consecuencias de las leyes de la republica de colombia que menciones.
+
 Extrae los siguientes aspectos del documento legal para iniciar un analisis del caso:
 - Partes involucradas (listado)
 - Objeto del documento (listado)

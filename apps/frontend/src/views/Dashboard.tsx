@@ -7,6 +7,8 @@ import FontProvider from '../providers/FontProvider';
 import DocumentSummary from '../components/DocumentSummary';
 import DocumentDetail from '../components/DocumentDetail';
 import Theme from '../common/Theme';
+import { useDocumentStore } from '../state/store';
+import { DomainEntities } from '../../../../packages/domain/src/lib/entity';
 
 const Dashboard = () => {
   const [dimensions, setDimensions] = useState<{
@@ -14,6 +16,7 @@ const Dashboard = () => {
   }>({
     width: Dimensions.get("window").width
   });
+  const setDocuments = useDocumentStore(state => state.setDocuments)
 
   useEffect(() => {
     Dimensions.addEventListener(
@@ -23,7 +26,19 @@ const Dashboard = () => {
           width: window.width
         })
       }
-    )
+    );
+
+    fetch('http://localhost:3000/api/v1/legal-document')
+      .then(response => response.json().then(
+        jsonResponse => {
+          setDocuments(
+            (jsonResponse as {
+              isError: boolean,
+              data: Array<Exclude<DomainEntities.LegalDocument, 'id'> & {_id: string}>
+            }).data.map(v => ({...v, id: v._id}))
+          )
+        }
+      ))
   }, [])
 
   const isMobileLayout = dimensions.width > 800

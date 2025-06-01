@@ -15,6 +15,7 @@ export default fp(async function (fastify: FastifyInstance) {
     attachFieldsToBody: 'keyValues',
     onFile: async (part: MultipartFile) => {
       const buff = await part.toBuffer();
+      console.log("BUFF", buff);
       (part as any).value = buff.toString('base64')
     }
   });

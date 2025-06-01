@@ -1,8 +1,9 @@
 import { StyleSheet, View, Text, FlatList, ScrollView } from "react-native";
 import Theme from "../common/Theme";
 import { useDocumentStore } from "../state/store";
-import { Document } from "../state/store";
 import Button from "../common/Button";
+import { DomainEntities } from "../../../../packages/domain/src/lib/entity";
+import { useMemo } from "react";
 
 const DocumentDetailEmptyMessage = () => {
   return (
@@ -16,8 +17,7 @@ const DocumentDetailEmptyMessage = () => {
 const TextListElement = ({text}: {text: string}) => {
   return (
     <View style={styles.detailTextDecorationContainer}>
-      <View style={styles.detailTextDecoration} />
-      <Text style={styles.detailText}>{text}</Text>
+      <Text style={styles.detailText}>• {text}</Text>
     </View>
   )
 }
@@ -35,19 +35,24 @@ const TextList = ({text}: {text: Array<string>}) => {
     )
 }
 
-const DocumentDetailMessage = ({data}: {data: Document}) => {
+const DocumentDetailMessage = ({data}: {data: DomainEntities.LegalDocument}) => {
+  const obligations = useMemo(() => data.obligations.map(v => v.involvedPart.concat(': ').concat(v.description)), [data])
+  const rights = useMemo(() => data.rights.map(v => v.involvedPart.concat(': ').concat(v.description)), [data])
+
   return (
     <View style={styles.nonEmptyDetailContainer}>
       <ScrollView style={{height: '100%', width: '100%'}} contentContainerStyle={styles.detailListScrollContainer}>
         <Text style={styles.detailTitle}>{data.title}</Text>
+        <Text style={styles.detailSubtitle}>Objetivos</Text>
+        <TextList text={data.objectives}/>
         <Text style={styles.detailSubtitle}>Obligaciones</Text>
-        <TextList text={new Array(5).fill(null).map(_ => "prueba")}/>
+        <TextList text={obligations}/>
         <Text style={styles.detailSubtitle}>Derechos</Text>
-        <TextList text={new Array(5).fill(null).map(_ => "prueba")}/>
+        <TextList text={rights}/>
         <Text style={styles.detailSubtitle}>Partes involucradas</Text>
-        <TextList text={new Array(5).fill(null).map(_ => "prueba")}/>
+        <TextList text={data.involvedParts}/>
         <Text style={styles.detailSubtitle}>Condiciones economicas</Text>
-        <TextList text={new Array(10).fill(null).map(_ => "prueba")}/>
+        <TextList text={data.economicConditions.map(v => v.involvedPart.concat(' (').concat(v.amount.toString().concat(v.currency).concat('): ').concat(v.description).concat('\n').concat(v.conditions.reduce((acc, cur) => acc.concat('\t• '.concat(cur)).concat('\n'), ''))))}/>
         <View style={styles.buttonContainer}>
           <Button><Text style={styles.buttonText}>Descargar archivo</Text></Button>
           <Button><Text style={styles.buttonText}>Deshabilitar archivo</Text></Button>
@@ -147,19 +152,20 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-start',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: Theme.spacing.small,
-    maxHeight: 20
+    padding: Theme.spacing.extrasmall
   },
   detailTextDecoration: {
     width: 7,
     height: 7,
+    marginTop: Theme.spacing.small,
     borderRadius: '100%',
     backgroundColor: Theme.color.foregroundPrimary
   },
   detailListContainer: {
     height: '100%',
-    minHeight: 100,
+    minHeight: 200,
     paddingLeft: Theme.spacing.medium
   }
 })

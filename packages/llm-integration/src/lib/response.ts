@@ -32,6 +32,7 @@ export namespace LLMResponses {
   });
 
   export const legalDocumentSchema = z.object({
+    title: z.string().describe("a text with a maximum of 50 characters that explains the main purpose of the document"),
     terms: z.array(termsItemSchema).describe("temporal terms that apply to the legal document"),
     involved_parts: z.array(z.string().describe("involved part inside the legal document")).describe("list of the involved parts listed on the legal document"),
     objectives: z.array(z.string().describe("description of the objective")).describe("objectives of the legal document, what is its purpose"),

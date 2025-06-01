@@ -10,10 +10,10 @@ export namespace Streaming {
 	): Effect.Effect<
 		Stream.Stream<AIMessageChunk, void, never>,
 		never,
-		Services.TypistAgentInstance
+		Services.OCRAgentInstance
 	> {
 		return Effect.gen(function* () {
-			const llm = yield* Services.TypistAgentInstance;
+			const llm = yield* Services.OCRAgentInstance;
 			const stream = yield* Effect.promise(() => llm.stream(input));
 			const reader = stream.getReader();
 			const readStreamChunk = async function* () {

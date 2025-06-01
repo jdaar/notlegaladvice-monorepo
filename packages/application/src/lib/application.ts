@@ -1,7 +1,7 @@
 import { Services } from "@notlegaladvice/domain"
 import { Effect } from "effect";
 import { mainLive } from "./live.js";
-import { Placeholder, GetLegalDocuments, CreateLegalDocument, ExecuteLLMExtractionFromDocument } from "@notlegaladvice/usecase";
+import { GetLegalDocuments, CreateLegalDocument, ExecuteLLMExtractionFromDocument, CreateLegalDocumentFromDocument } from "@notlegaladvice/usecase";
 
 
 export namespace Contexts {
@@ -11,10 +11,10 @@ export namespace Contexts {
 		Services.OCRAgentInstance |
     Services.AgentCompletionInstance;
 
-	export type HandlerContext = Placeholder
-  | GetLegalDocuments
+	export type HandlerContext = GetLegalDocuments
   | CreateLegalDocument
-  | ExecuteLLMExtractionFromDocument;
+  | ExecuteLLMExtractionFromDocument
+  | CreateLegalDocumentFromDocument;
 
 	export type ApplicationContext = UseCaseContext | HandlerContext;
 }

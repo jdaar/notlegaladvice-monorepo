@@ -38,7 +38,34 @@ export namespace LLMChains {
         serializationChain(model),
         (response: z.infer<typeof LLMResponses.legalDocumentSchema>) => {
           return {
-            title: response.objectives[0] ?? ''
+            title: response.title,
+            terms: response.terms.map(v => ({
+              duration: v.duration,
+              description: v.description,
+              involvedPart: v.involved_part
+            })),
+            rights: response.rights.map(v => ({
+              involvedPart: v.involved_part,
+              description: v.description
+            })),
+            obligations: response.obligations.map(v => ({
+              involvedPart: v.involved_part,
+              description: v.description
+            })),
+            objectives: response.objectives,
+            involvedLaws: response.involved_laws.map(v => ({
+              description: v.description,
+              name: v.name
+            })),
+            involvedParts: response.involved_parts,
+            dueDateValidity: response.due_date_validity,
+            economicConditions: response.economic_conditions.map(v => ({
+              description: v.description,
+              involvedPart: v.involved_part,
+              amount: v.amount,
+              currency: v.currency,
+              conditions: v.conditions
+            }))
           } satisfies DomainEntities.LegalDocument
         }
     ]);
