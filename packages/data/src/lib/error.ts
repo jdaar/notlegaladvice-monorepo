@@ -14,7 +14,11 @@ export namespace Errors {
 		UnableToConnectToDatabase = "UNABLE_TO_CONNECT_TO_DATABASE",
 		UnableToInsertIntoDatabase = "UNABLE_TO_INSERT_INTO_DATABASE",
 		UnableToRetrieveFromDatabase = "UNABLE_TO_RETRIEVE_FROM_DATABASE",
+		UnableToUpdateDatabase = "UNABLE_TO_UPDATE_DATABASE",
+		UnableToDeleteFromDatabase = "UNABLE_TO_DELETE_FROM_DATABASE",
 		UnableToCreateLegalDocument = "UNABLE_TO_CREATE_LEGAL_DOCUMENT",
+		UnableToDeleteLegalDocument = "UNABLE_TO_DELETE_LEGAL_DOCUMENT",
+    UnableToDisableLegalDocument = "UNABLE_TO_DISABLE_LEGAL_DOCUMENT",
 		UnableToGetLegalDocuments = "UNABLE_TO_GET_LEGAL_DOCUMENTS",
     UnableToExecuteLLMExtractionPipeline = "UNABLE_TO_EXECUTE_LLM_EXTRACTION_PIPELINE",
 		Unidentified = "UNIDENTIFIED"
@@ -47,16 +51,28 @@ export namespace Errors {
 	export class UnableToConnectToDatabase extends Data.TaggedError(Code.UnableToConnectToDatabase)<{
 		cause: Error
 	}>{}
-	export class UnableToInsertIntoDatabase extends Data.TaggedError(Code.UnableToConnectToDatabase)<{
+	export class UnableToInsertIntoDatabase extends Data.TaggedError(Code.UnableToInsertIntoDatabase)<{
 		cause: Error
 	}>{}
 	export class UnableToRetrieveFromDatabase extends Data.TaggedError(Code.UnableToRetrieveFromDatabase)<{
+		cause: Error
+	}>{}
+	export class UnableToUpdateDatabase extends Data.TaggedError(Code.UnableToUpdateDatabase)<{
+		cause: Error
+	}>{}
+	export class UnableToDeleteFromDatabase extends Data.TaggedError(Code.UnableToDeleteFromDatabase)<{
 		cause: Error
 	}>{}
 	export class UnableToCreateLegalDocument extends Data.TaggedError(Code.UnableToCreateLegalDocument)<{
 		cause: Error
 	}>{}
 	export class UnableToGetLegalDocuments extends Data.TaggedError(Code.UnableToGetLegalDocuments)<{
+		cause: Error
+	}>{}
+	export class UnableToDeleteLegalDocument extends Data.TaggedError(Code.UnableToDeleteLegalDocument)<{
+		cause: Error
+	}>{}
+	export class UnableToDisableLegalDocument extends Data.TaggedError(Code.UnableToDisableLegalDocument)<{
 		cause: Error
 	}>{}
 	export class UnableToExecuteLLMExtractionPipeline extends Data.TaggedError(Code.UnableToExecuteLLMExtractionPipeline)<{

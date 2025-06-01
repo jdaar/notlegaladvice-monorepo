@@ -31,6 +31,8 @@ export namespace Services {
     {
       readonly createLegalDocument: (document: DomainEntities.LegalDocument) => Effect.Effect<void, Error, never>
       readonly getLegalDocuments: () => Effect.Effect<Array<DomainEntities.LegalDocument>, Error, never>
+      readonly deleteLegalDocument: (id: string) => Effect.Effect<void, Error, never>
+      readonly markLegalDocumentAsDisabled: (id: string, isDisabled: boolean) => Effect.Effect<void, Error, never>
     }
   >() {}
 

@@ -28,7 +28,6 @@ const DocumentSummary = () => {
 
   const [isUploading, setIsUploading] = useState(false);
 
-  const setDocuments = useDocumentStore(state => state.setDocuments)
 
   const handleUploadFileOnPress = useCallback(async (_: GestureResponderEvent) => {
     if (!isUploading) {
@@ -78,26 +77,17 @@ const DocumentSummary = () => {
           }
         }
       }
-        /*
-        const formData = new FormData();
-
-        formData.append('file', {
-          uri: Platform.OS === 'ios' ? documentToUpload.assets[0].uri.replace('file://', '') : documentToUpload.assets[0].uri,
-          name: documentToUpload.assets[0].name,
-          type: 'application/pdf',
-        });
-        */
-
     }
   }, [])
 
   const isMobileLayout = dimensions.width < 715
 
   const documents = useDocumentStore(state => state.documents)
+  const setDocuments = useDocumentStore(state => state.setDocuments)
 
-  const documentCount = useMemo(() => documents?.length, [documents]);
+  const documentCount = useMemo(() => documents?.filter(v => !v.isDisabled).length, [documents]);
 
-  const documentObligations = useMemo(() => documents?.map(v =>
+  const documentObligations = useMemo(() => documents?.filter(v => !v.isDisabled).map(v =>
     v.obligations.reduce((acc, item) => {
       const part = item.involvedPart;
       if (!acc[part]) {
@@ -118,7 +108,7 @@ const DocumentSummary = () => {
     [documents]
   );
 
-  const documentRights = useMemo(() => documents?.map(v =>
+  const documentRights = useMemo(() => documents?.filter(v => !v.isDisabled).map(v =>
     v.rights.reduce((acc, item) => {
       const part = item.involvedPart;
       if (!acc[part]) {
@@ -140,13 +130,10 @@ const DocumentSummary = () => {
   );
 
   const documentEconomicConditions = useMemo(() =>
-    documents?.flatMap(v => v.economicConditions.map(vv => vv.amount))
+    documents?.filter(v => !v.isDisabled).flatMap(v => v.economicConditions.map(vv => vv.amount))
       .reduce((acc, cur) => acc + cur, 0),
     [documents]
   )
-
-  useEffect(() => console.log(
-  ), [documentObligations])
 
   return (
     <View style={{...styles.summaryContainer, flexDirection: !isMobileLayout ? 'row' : 'column'}}>

@@ -47,7 +47,7 @@ const DocumentList = () => {
           onLayout={handleDocumentListContainerOnLayout}
           numColumns={calculateColumnNumber(dimensions.width)}
           renderItem={item => <DocumentCard data={item.item.data} style={{width: documentListWidth / calculateColumnNumber(dimensions.width), minHeight: 375}}/>}
-          keyExtractor={item => item.data.objectives[0].concat(item.data.id!)}
+          keyExtractor={item => item.data.id!}
           key={calculateColumnNumber(dimensions.width)}
         />
       </ScrollView>

@@ -39,6 +39,7 @@ export namespace LLMChains {
         (response: z.infer<typeof LLMResponses.legalDocumentSchema>) => {
           return {
             title: response.title,
+            isDisabled: false,
             terms: response.terms.map(v => ({
               duration: v.duration,
               description: v.description,

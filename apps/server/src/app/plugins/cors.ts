@@ -4,6 +4,12 @@ import cors from '@fastify/cors';
 
 export default fp(async function (fastify: FastifyInstance) {
   fastify.register(cors, {
-    origin: '*'
+    origin: '*',
+    methods: [
+      "POST",
+      "PATCH",
+      "DELETE",
+      "GET"
+    ]
   });
 });

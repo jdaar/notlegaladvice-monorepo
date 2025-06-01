@@ -1,10 +1,10 @@
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import { StyleSheet, View, TouchableOpacity, TouchableOpacityProps } from "react-native";
 import Theme from "./Theme";
 import React from "react";
 
-const Button = ({children}: {children: React.ReactNode}) => {
+const Button = ({children, onPress}: {children: React.ReactNode} & TouchableOpacityProps) => {
   return (
-    <TouchableOpacity>
+    <TouchableOpacity onPress={onPress}>
       <View style={styles.buttonContainer}>
         {children}
       </View>

@@ -1,4 +1,4 @@
-import { getLegalDocumentsLive, createLegalDocumentLive, createLegalDocumentFromDocumentLive, executeLLMExtractionFromDocumentLive } from "@notlegaladvice/usecase"
+import { getLegalDocumentsLive, createLegalDocumentLive, createLegalDocumentFromDocumentLive, executeLLMExtractionFromDocumentLive, disableLegalDocumentLive, deleteLegalDocumentLive } from "@notlegaladvice/usecase"
 import { Layer } from "effect"
 
 export const useCaseLive = () =>
@@ -10,4 +10,7 @@ export const useCaseLive = () =>
         Layer.merge(createLegalDocumentLive)
       ),
     )
-  );
+  ).pipe(
+    Layer.merge(disableLegalDocumentLive),
+    Layer.merge(deleteLegalDocumentLive)
+  )

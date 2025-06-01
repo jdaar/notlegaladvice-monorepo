@@ -1,9 +1,10 @@
-import { StyleSheet, View, Text, FlatList, ScrollView } from "react-native";
+import { StyleSheet, View, Text, FlatList, ScrollView, GestureResponderEvent } from "react-native";
 import Theme from "../common/Theme";
 import { useDocumentStore } from "../state/store";
 import Button from "../common/Button";
 import { DomainEntities } from "../../../../packages/domain/src/lib/entity";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
+import { Toast } from "toastify-react-native";
 
 const DocumentDetailEmptyMessage = () => {
   return (
@@ -39,8 +40,71 @@ const DocumentDetailMessage = ({data}: {data: DomainEntities.LegalDocument}) => 
   const obligations = useMemo(() => data.obligations.map(v => v.involvedPart.concat(': ').concat(v.description)), [data])
   const rights = useMemo(() => data.rights.map(v => v.involvedPart.concat(': ').concat(v.description)), [data])
 
+  const documents = useDocumentStore(state => state.documents);
+  const setDocuments = useDocumentStore(state => state.setDocuments);
+
+  const handleDeleteLegalDocumentOnPress = useCallback(async (_: GestureResponderEvent) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/legal-document", {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          id: data.id
+        }),
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        Toast.success("Se elimino el documento correctamente");
+        setDocuments(
+          documents!.filter(v => v.id != data.id)
+        )
+        console.log(responseData)
+      } else {
+        const errorText = await response.text();
+        Toast.success("No se elimino el documento debido a un error");
+        console.error('Network or upload error:', errorText);
+      }
+    } catch (error) {
+      console.error('Network or upload error:', error);
+    }
+  }, [documents, data])
+
+  const handleDisableLegalDocumentOnPress = useCallback(async (_: GestureResponderEvent) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/v1/legal-document", {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          id: data.id,
+          isDisabled: !data.isDisabled
+        }),
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        Toast.success("Se cambio el estado del documento correctamente");
+        setDocuments([
+          ...documents!.filter(v => v.id != data.id),
+          {...data, isDisabled: !data.isDisabled}
+        ])
+        console.log(responseData)
+      } else {
+        const errorText = await response.text();
+        Toast.success("No se cambio el estado del documento debido a un error");
+        console.error('Network or upload error:', errorText);
+      }
+    } catch (error) {
+      console.error('Network or upload error:', error);
+    }
+  }, [documents, data])
+
   return (
-    <View style={styles.nonEmptyDetailContainer}>
+    <View style={styles.nonEmptyDetailContainer} key={data.id?.concat(data.isDisabled.toString())}>
       <ScrollView style={{height: '100%', width: '100%'}} contentContainerStyle={styles.detailListScrollContainer}>
         <Text style={styles.detailTitle}>{data.title}</Text>
         <Text style={styles.detailSubtitle}>Objetivos</Text>
@@ -54,9 +118,9 @@ const DocumentDetailMessage = ({data}: {data: DomainEntities.LegalDocument}) => 
         <Text style={styles.detailSubtitle}>Condiciones economicas</Text>
         <TextList text={data.economicConditions.map(v => v.involvedPart.concat(' (').concat(v.amount.toString().concat(v.currency).concat('): ').concat(v.description).concat('\n').concat(v.conditions.reduce((acc, cur) => acc.concat('\t• '.concat(cur)).concat('\n'), ''))))}/>
         <View style={styles.buttonContainer}>
-          <Button><Text style={styles.buttonText}>Descargar archivo</Text></Button>
-          <Button><Text style={styles.buttonText}>Deshabilitar archivo</Text></Button>
-          <Button><Text style={styles.buttonText}>Eliminar archivo</Text></Button>
+          <Button ><Text style={styles.buttonText}>Descargar archivo</Text></Button>
+          <Button onPress={handleDisableLegalDocumentOnPress}><Text style={styles.buttonText}>{data.isDisabled ? 'Habilitar archivo' : 'Deshabilitar archivo'}</Text></Button>
+          <Button onPress={handleDeleteLegalDocumentOnPress}><Text style={styles.buttonText}>Eliminar archivo</Text></Button>
         </View>
       </ScrollView>
     </View>

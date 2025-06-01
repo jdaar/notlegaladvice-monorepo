@@ -36,6 +36,7 @@ export namespace DomainEntities {
 
   export type LegalDocument = {
     id?: string;
+    isDisabled: boolean;
     title: string;
     terms: TermsItem[];
     involvedParts: string[];

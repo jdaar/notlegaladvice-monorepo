@@ -29,7 +29,7 @@ const DocumentCard = ({style, data}: {style?: ViewStyle, data: DomainEntities.Le
             <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.involvedParts.length} partes involucradas`}/>
             <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.obligations.length} obligaciones`}/>
             <SelectableSubtitle isSelectedCard={isSelectedCard} text={`${data.rights.length} derechos`}/>
-            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`$${data.economicConditions.map(v => v.amount).reduce((acc, cur) => acc + cur)} en condiciones economicas`}/>
+            <SelectableSubtitle isSelectedCard={isSelectedCard} text={`$${data.economicConditions.map(v => v.amount).reduce((acc, cur) => acc + cur, 0)} en condiciones economicas`}/>
           </View>
         </View>
       </View>
