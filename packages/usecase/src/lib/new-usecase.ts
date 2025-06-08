@@ -25,3 +25,4 @@ export const newUsecaseLive = Layer.succeed(
   NewUsecase,
   NewUsecase.of(newUsecase)
 );
+export const newUsecaseFn = newUsecase;
