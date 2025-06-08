@@ -1,7 +1,7 @@
 import { Services } from "@notlegaladvice/domain"
 import { Effect } from "effect";
 import { mainLive } from "./live.js";
-import { GetLegalDocuments, CreateLegalDocument, ExecuteLLMExtractionFromDocument, CreateLegalDocumentFromDocument, DeleteLegalDocument, DisableLegalDocument } from "@notlegaladvice/usecase";
+import { GetLegalDocuments, CreateLegalDocument, ExecuteLLMExtractionFromDocument, CreateLegalDocumentFromDocument, DeleteLegalDocument, DisableLegalDocument, NewUsecase } from "@notlegaladvice/usecase";
 
 
 export namespace Contexts {
@@ -16,7 +16,8 @@ export namespace Contexts {
   | ExecuteLLMExtractionFromDocument
   | CreateLegalDocumentFromDocument
   | DeleteLegalDocument
-  | DisableLegalDocument;
+  | DisableLegalDocument
+  | NewUsecase;
 
 	export type ApplicationContext = UseCaseContext | HandlerContext;
 }
