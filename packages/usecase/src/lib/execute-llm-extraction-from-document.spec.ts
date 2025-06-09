@@ -1,7 +1,7 @@
 import { Effect, Layer } from "effect";
 import { executeLLMExtractionFromDocumentLive, ExecuteLLMExtractionFromDocument } from "./execute-llm-extraction-from-document";
 import { Errors } from "@notlegaladvice/data";
-import { DomainEntities } from "@notlegaladvice/domain";
+import { DomainEntities, Services } from "@notlegaladvice/domain";
 import { Prompts, LLMChains } from "@notlegaladvice/llm-integration";
 
 // Create dummy layers for dependencies
@@ -36,8 +36,8 @@ describe("Given a valid OCRChainInput when executeLLMExtractionFromDocument is e
 
     // Provide dummy implementations for dependencies
     const dependencyLayer = Layer.provideMerge(
-      Layer.succeed<any, any>("OCRAgentInstance", dummyOCRAgentInstance),
-      Layer.succeed<any, any>("AgentCompletionInstance", dummyAgentCompletionInstance)
+      Layer.succeed(Services.OCRAgentInstance, dummyOCRAgentInstance),
+      Layer.succeed(Services.AgentCompletionInstance, dummyAgentCompletionInstance)
     );
 
     const effectUnderTest = Effect.gen(function* () {
