@@ -1,3 +1,9 @@
+# Descripcion del proyecto
+
+Aplicacion multiplataforma para la gestion de documentos legales integrada con un agente de inteligencia artificial capaz de extraer datos principales de los documentos y calcular metricas globales sobre la libreria.
+
+[![CI](https://github.com/jdaar/notlegaladvice-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/jdaar/notlegaladvice-monorepo/actions/workflows/ci.yml)
+
 # Estructura de carpetas
 
 - /apps = Todo lo relacionado a entrypoints de los paquetes del workspace @notlegaladvice
@@ -21,7 +27,14 @@ Se recomienda el uso de Nix como gestor de paquetes pues se cuenta con un flake 
 
 ### Instrucciones de ejecucion
 
-En progreso.
+> Instalar dependencias (Opcional si ya se cuenta con Node 20.x y Corepack 20.x)
+> `nix develop`
+
+> Instalar dependencias de Node
+> `npm install`
+
+> Ejecutar la aplicacion (Para plataforma web)
+> `npx nx run @notlegaladvice/server:serve`
 
 ### Despliegue en K8s
 
@@ -33,7 +46,21 @@ En progreso.
 
 > kind load docker-image localhost/notlegaladvice-server:latest
 
-> kubectl apply -f deployment/cluster/...
+> kubectl apply -f deployment/cluster/01-secrets.yaml # (Secretos de backend) 
+
+> kubectl apply -f deployment/cluster/02-configmap.yaml # (Configmap de backend)
+
+> kubectl apply -f deployment/cluster/03-otlp-collector-deployment.yaml # (Despliegue de Jaeger para OTLP)
+
+> kubectl apply -f deployment/cluster/04-otlp-collector-service.yaml # (Servicio de Jaeger)
+
+> kubectl apply -f deployment/cluster/05-application-deployment.yaml # (Despliegue de backend)
+
+> kubectl apply -f deployment/cluster/06-application-service.yaml # (Servicio de backend)
+
+> kubectl apply -f deployment/cluster/07-application-ingress.yaml # (Ingress de backend)
+
+> Despues de haber realizado el despliegue completo, el backend debe estar disponible en http://local.projectcontour.io:8081/
 
 ## Ejecucion del frontend
 
