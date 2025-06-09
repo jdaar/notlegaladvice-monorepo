@@ -4,13 +4,13 @@ Aplicacion multiplataforma para la gestion de documentos legales integrada con u
 
 [![CI](https://github.com/jdaar/notlegaladvice-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/jdaar/notlegaladvice-monorepo/actions/workflows/ci.yml)
 
-# Grafo de dependencias
-
-![Grafo de dependencias](./.github/image/dependency_graph.jpg)
-
 # UI
 
 ![Screenshot del frontend](./.github/image/frontend.jpg)
+
+# Grafo de dependencias
+
+![Grafo de dependencias](./.github/image/dependency_graph.jpg)
 
 # Estructura de carpetas
 
