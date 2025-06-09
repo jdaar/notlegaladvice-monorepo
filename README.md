@@ -36,13 +36,23 @@ Se recomienda el uso de Nix como gestor de paquetes pues se cuenta con un flake 
 > Ejecutar la aplicacion (Para plataforma web)
 > `npx nx run @notlegaladvice/server:serve`
 
+### Stack tecnologico
+
+- Libreria HTTP: Fastify
+- Instrumentacion CI: Github Actions
+- Instrumentacion CD: Podman y Kubernetes
+- Testing: Jest
+- Build system: NX
+- Framework LLM: LangChain
+- Integraciones: MongoDB y LightRAG
+
 ### Despliegue en K8s
 
-> Crear imagen (ejecutar desde el root del projecto de Git)
+#### Crear imagen (ejecutar desde el root del projecto de Git)
 
 > podman build -t notlegaladvice-server:latest -f deployment/Dockerfile
 
-> Crear recursos de K8s
+#### Crear recursos de K8s
 
 > kind load docker-image localhost/notlegaladvice-server:latest
 
@@ -60,7 +70,7 @@ Se recomienda el uso de Nix como gestor de paquetes pues se cuenta con un flake 
 
 > kubectl apply -f deployment/cluster/07-application-ingress.yaml # (Ingress de backend)
 
-> Despues de haber realizado el despliegue completo, el backend debe estar disponible en http://local.projectcontour.io:8081/
+Despues de haber realizado el despliegue completo, el backend debe estar disponible en http://local.projectcontour.io:8081/
 
 ## Ejecucion del frontend
 
@@ -80,5 +90,6 @@ Habiendo hecho esto el frontend deberia estar disponible en http://localhost:808
 ### Stack tecnologico
 
 - Libreria UI: React Native
+- Metaframework TS (Sistema de efectos funcionales): EffectTS 
 - Libreria para funcionalidades nativas: Expo
 - Libreria para manejo de estado global: Zustand
