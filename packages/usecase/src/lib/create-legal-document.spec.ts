@@ -33,7 +33,7 @@ describe("Given a valid legal document and repository that successfully creates 
     // Act
     const effectUnderTest = Effect.gen(function* () {
       const usecase = yield* CreateLegalDocument;
-      return usecase(dummyDoc);
+      return yield* usecase(dummyDoc);
     }).pipe(Effect.provide(
       Layer.provideMerge(
         createLegalDocumentLive,
@@ -81,7 +81,9 @@ describe("Given a repository that fails to create a legal document, When createL
     const effectUnderTest = Effect.gen(function* () {
       const usecase = yield* CreateLegalDocument;
       return yield* usecase(dummyDoc);
-    }).pipe(Effect.provide(repositoryLayer));
+    }).pipe(Effect.provide(
+      Layer.provideMerge(createLegalDocumentLive, repositoryLayer)
+    ));
 
     // Assert
     await expect(Effect.runPromise(effectUnderTest)).rejects.toEqual(
