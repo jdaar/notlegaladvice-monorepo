@@ -4,6 +4,8 @@ Aplicacion multiplataforma para la gestion de documentos legales integrada con u
 
 [![CI](https://github.com/jdaar/notlegaladvice-monorepo/actions/workflows/ci.yml/badge.svg)](https://github.com/jdaar/notlegaladvice-monorepo/actions/workflows/ci.yml)
 
+> Nota: Si se encuentra en este repositorio con el objetivo de hacer la revision de la entrega numero 1 de la materia Desarrollo Web de la Universidad Nacional de Colombia, se sugiere revisar principalmente los contenidos de la carpeta **/apps/frontend** pues es este el punto central donde se implementa todo lo relacionado a la UI, ademas de que se puede llegar a complicar el despliegue del backend ya que se requieren api keys y uris a otros servicios
+
 # UI
 
 ![Screenshot del frontend](./.github/image/frontend.jpg)
@@ -15,7 +17,7 @@ Aplicacion multiplataforma para la gestion de documentos legales integrada con u
 # Estructura de carpetas
 
 - /apps = Todo lo relacionado a entrypoints de los paquetes del workspace @notlegaladvice
-  - /apps/frontend = Frontend React Native **(AQUI SE ENCUENTRA EL CONTENIDO PRINCIPAL DE LA ENTREGA 1, TODO LO DEMAS ES PRINCIPALMENTE DE BACKEND)**
+  - /apps/frontend = Frontend React Native
   - /apps/server = Backend Fastify
 - /packages = Todo lo relacionado a dominio e integraciones
   - /packages/application = Capa de aplicacion (ubicacion del mecanismo de IoC)
