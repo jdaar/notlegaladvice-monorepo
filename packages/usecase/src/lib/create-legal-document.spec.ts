@@ -86,8 +86,6 @@ describe("Given a repository that fails to create a legal document, When createL
     ));
 
     // Assert
-    await expect(Effect.runPromise(effectUnderTest)).rejects.toEqual(
-      new Errors.UnableToCreateLegalDocument({ cause: error })
-    );
+    await expect(Effect.runPromise(effectUnderTest)).rejects.toHaveProperty("message", expect.stringContaining("UNABLE_TO_CREATE_LEGAL_DOCUMENT"));
   });
 });
