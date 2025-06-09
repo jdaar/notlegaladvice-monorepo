@@ -71,8 +71,8 @@ describe("Given an error occurs during sequence.invoke when executeLLMExtraction
 
     // Provide dummy implementations for dependencies
     const dependencyLayer = Layer.provideMerge(
-      Layer.succeed<any, any>("OCRAgentInstance", dummyOCRAgentInstance),
-      Layer.succeed<any, any>("AgentCompletionInstance", dummyAgentCompletionInstance)
+      Layer.succeed(Services.OCRAgentInstance, dummyOCRAgentInstance),
+      Layer.succeed(Services.AgentCompletionInstance, dummyAgentCompletionInstance)
     );
 
     const effectUnderTest = Effect.gen(function* () {
