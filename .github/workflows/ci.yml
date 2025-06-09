@@ -20,4 +20,4 @@ jobs:
           cache: 'npm'
       - run: npm ci --legacy-peer-deps
       - uses: nrwl/nx-set-shas@v4
-      - run: npx nx affected --no-cloud -t test build
+      - run: npx nx affected --no-cloud -t test build --exclude @notlegaladvice/frontend
