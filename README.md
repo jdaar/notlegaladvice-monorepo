@@ -8,6 +8,10 @@ Aplicacion multiplataforma para la gestion de documentos legales integrada con u
 
 ![Grafo de dependencias](./.github/image/dependency_graph.jpg)
 
+# UI
+
+![Screenshot del frontend](./.github/image/frontend.jpg)
+
 # Estructura de carpetas
 
 - /apps = Todo lo relacionado a entrypoints de los paquetes del workspace @notlegaladvice
