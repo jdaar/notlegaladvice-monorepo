@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals';
-import { Effect } from "effect";
-import { createLegalDocumentFromDocumentLive, createLegalDocumentFromDocument } from "./create-legal-document-from-document";
+import { Effect, Layer } from "effect";
+import { createLegalDocumentFromDocumentLive, CreateLegalDocumentFromDocument } from "./create-legal-document-from-document";
 import { ExecuteLLMExtractionFromDocument } from "./execute-llm-extraction-from-document";
 import { CreateLegalDocument } from "./create-legal-document";
 import { Prompts } from "@notlegaladvice/llm-integration";
@@ -18,9 +18,11 @@ describe("Given a valid OCRChainInput when createLegalDocumentFromDocument is ex
       objectives: [],
       obligations: [],
       rights: [],
-      dueDateValidity: "2025-01-01"
+      dueDateValidity: "2025-01-01",
+      economicConditions: [],
+      involvedLaws: []
     };
-    
+
     const dummyInput: Prompts.OCRChainInput = {
       base64Image: "dummyBase64"
     };
@@ -36,9 +38,24 @@ describe("Given a valid OCRChainInput when createLegalDocumentFromDocument is ex
     };
 
     // Provide mock dependencies in the Effect context.
-    const effectUnderTest = createLegalDocumentFromDocument(dummyInput)
-      .provideService(ExecuteLLMExtractionFromDocument, mockExecuteLLMExtractionFromDocument)
-      .provideService(CreateLegalDocument, mockCreateLegalDocument);
+    const effectUnderTest = Effect.gen(function* () {
+      const usecase = yield* CreateLegalDocumentFromDocument;
+      return yield* usecase(dummyInput)
+    })
+      .pipe(
+        Effect.provide(Layer.provideMerge(
+          createLegalDocumentFromDocumentLive,
+          Layer.succeed(
+            ExecuteLLMExtractionFromDocument,
+            ExecuteLLMExtractionFromDocument.of(mockExecuteLLMExtractionFromDocument)
+          ).pipe(
+            Layer.merge(Layer.succeed(
+              CreateLegalDocument,
+              CreateLegalDocument.of(mockCreateLegalDocument)
+            ))
+          )
+        ))
+      );
 
     // Act
     const result = await Effect.runPromise(effectUnderTest);

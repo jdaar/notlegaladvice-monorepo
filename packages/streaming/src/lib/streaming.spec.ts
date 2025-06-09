@@ -23,8 +23,8 @@ async function getStreamEffect() {
 		.pipe(
 			Effect.provide(
 				Layer.succeed(
-					Services.TypistAgentInstance,
-					Services.TypistAgentInstance.of({
+					Services.OCRAgentInstance,
+					Services.OCRAgentInstance.of({
 						stream: async (_: Array<BaseMessage>) => ({
 							getReader: () => ({
 								read: async () => {

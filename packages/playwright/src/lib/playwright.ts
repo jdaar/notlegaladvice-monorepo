@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { chromium } from 'playwright';
-import { Effect, Layer } from 'effect';
+import { Layer } from 'effect';
 import { Services } from '@notlegaladvice/domain';
 
 export function playwright(): string {
@@ -17,20 +17,20 @@ export async function renderPDFToImages(pdfBytes: Uint8Array): Promise<Array<Uin
     const dataUrl = `data:application/pdf;base64,${base64PDF}`;
 
     await page.goto(dataUrl);
-    
+
     const pageCount = await page.evaluate(() => {
       // @ts-ignore - Access PDFViewerApplication from PDF.js which is available in data URL context
       return PDFViewerApplication.pagesCount;
     });
 
     const images: Uint8Array[] = [];
-    
+
     for (let i = 0; i < pageCount; i++) {
-      await page.evaluate((pageNum) => {
+      await page.evaluate((pageNum: number) => {
         // @ts-ignore - Access PDFViewerApplication from PDF.js
         PDFViewerApplication.page = pageNum;
       }, i + 1);
-      
+
       await page.waitForTimeout(500);
 
       const screenshot = await page.screenshot();

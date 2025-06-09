@@ -129,3 +129,4 @@ npm-debug.*
 *.orig.*
 web-build/
 cache/
+.aider*

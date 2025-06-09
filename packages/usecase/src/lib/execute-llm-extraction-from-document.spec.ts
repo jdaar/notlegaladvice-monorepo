@@ -63,7 +63,7 @@ describe("Given an error occurs during sequence.invoke when executeLLMExtraction
   it("arranges an input that causes invoke to fail, acts by invoking the use case, and asserts that the proper error is thrown", async () => {
     // Arrange
     const validInput: Prompts.OCRChainInput = { base64Image: "errorBase64String" };
-    const errorMessage = "Simulated extraction failure";
+    const errorMessage = "error";
     const mockSequence = {
       invoke: jest.fn(() => Promise.reject(new Error(errorMessage)))
     };
