@@ -2,6 +2,7 @@ import { Effect, Layer } from "effect";
 import { createLegalDocumentLive, CreateLegalDocument } from "./create-legal-document";
 import { Errors } from "@notlegaladvice/data";
 import { DomainEntities, Services } from "@notlegaladvice/domain";
+import { satisfies } from "effect/Function";
 
 describe("Given a valid legal document and repository that successfully creates the document, When createLegalDocument is executed, Then it should return the legal document", () => {
   it("should succeed and return the legal document", async () => {
@@ -20,17 +21,25 @@ describe("Given a valid legal document and repository that successfully creates 
       involvedLaws: []
     };
 
-    const mockRepository = {
-      createLegalDocument: jest.fn(() => Effect.succeed(dummyDoc))
-    };
+    const mockRepository: Services.LegalDocumentRepository['Type'] = ({
+      createLegalDocument: jest.fn((_) => Effect.succeed(dummyDoc)),
+    } satisfies Partial<Services.LegalDocumentRepository['Type']>) as any;
 
-    const repositoryLayer = Layer.succeed(Services.LegalDocumentRepository, mockRepository);
+    const repositoryLayer = Layer.succeed(
+      Services.LegalDocumentRepository,
+      Services.LegalDocumentRepository.of(mockRepository)
+    );
 
     // Act
     const effectUnderTest = Effect.gen(function* () {
       const usecase = yield* CreateLegalDocument;
-      return yield* usecase(dummyDoc);
-    }).pipe(Effect.provide(repositoryLayer));
+      return usecase(dummyDoc);
+    }).pipe(Effect.provide(
+      Layer.provideMerge(
+        createLegalDocumentLive,
+        repositoryLayer
+      )
+    ));
 
     const result = await Effect.runPromise(effectUnderTest);
 
@@ -59,11 +68,14 @@ describe("Given a repository that fails to create a legal document, When createL
 
     const error = new Error("Repository failure");
 
-    const mockRepository = {
-      createLegalDocument: jest.fn(() => Effect.fail(error))
-    };
+    const mockRepository: Services.LegalDocumentRepository['Type'] = {
+      createLegalDocument: jest.fn((_) => Effect.fail(error))
+    } as any as Services.LegalDocumentRepository['Type'];
 
-    const repositoryLayer = Layer.succeed(Services.LegalDocumentRepository, mockRepository);
+    const repositoryLayer = Layer.succeed(
+      Services.LegalDocumentRepository,
+      Services.LegalDocumentRepository.of(mockRepository)
+    );
 
     // Act
     const effectUnderTest = Effect.gen(function* () {
